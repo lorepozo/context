@@ -1,0 +1,83 @@
+\documentclass[12pt,letterpaper]{article}
+
+\renewcommand{\baselinestretch}{1.2}
+
+\pagenumbering{gobble}
+
+
+\title{{\large SuperUROP 2016-2017 Proposal:}\\
+  {\Large Learning with Semi-Structured Modular Concepts on a Symbolic Tagged
+Representation}}
+\author{Lucas E. Morales \texttt{\{lucasem\}}}
+\date{}
+
+
+\begin{document}
+
+\maketitle
+
+Theories, when learned, are constructed from combinations of concepts
+already known. I aim to organize a system for modular concept discovery
+influenced by previous works. Concepts may establish structured relations
+between themselves, such as real-valued functions which depend on the real
+numbers, which in turn depend on a construction of the real number system,
+which depends on propositional logic, etc. Conceptual relationships may not
+necessarily be hierarchical: concepts may share an interface and are
+hot-swappable, such as with the choice of a bag versus a box when confronted
+with a problem of containment. By maintaining these relationships, learning
+may be achieved with varying levels of granularity and ambiguity in the
+concepts involved. Relationships between concepts are stored in symbolic
+tags, a component of their representation, to permit both primitive and
+higher-order connections that may depend on other concepts.
+
+I intend to formalize this representation of knowledge, expand on existing
+learning systems to incorporate this feature, and analyze results of such
+modified approaches. I may determine an applicable problem domain to design
+a different learning system more tailored to the idea of semi-structured
+modular concepts.
+
+% AMB to reorganize parameterized inputs until proposition matches (SAT
+% Solver)
+
+% Heirarchy allows for metareasoning on higher levels of abstraction
+%  [2] construct a metatheory/schema for the solution, then fill in the gap
+% [2] Kevin Ellis, Owen Lewis. Metareasoning in Symbolic Domains. NIPS 2015 Workshop on Bounded Optimality and Rational Metareasoning
+
+% Useful links:
+%  - http://edechter.github.io/publications/DBLP_conf_ijcai_DechterMAT13.pdf
+%  - http://www.cs.berkeley.edu/~jordan/papers/liang-jordan-klein-icml10.pdf
+%  - http://edechter.github.io/publications/dechter2015latent.pdf
+%  - http://www.mit.edu/~ellisk/symdimred.pdf
+%  - http://www.mit.edu/~ellisk/metareasoning.pdf
+
+%\begin{thebibliography}{}
+%
+%\bibitem{dechter13}
+%  Dechter, E., Malmaud, J., Adams, R. P., & Tenenbaum, J. B. (2013).
+%  Bootstrap Learning via Modular Concept Discovery.
+%  \emph{Proceedings of the 23rd International Joint Conference on%
+%    Artificial Intelligence}
+%
+%\bibitem{liang10}
+%  Liang, P., Jordan, M. I., \& Klein, D. (2010).
+%  Learning programs: a hierarchical bayesian approach
+%  \emph{International Conference on Machine Learning}: 639–646
+%
+%\bibitem{church}
+%  Church, A. (1941)
+%  \emph{The Calculi of Lambda-Conversion}
+%  Princeton University Press
+%
+%\bibitem{schonfinkel}
+%  Sch\"{o}nfinkel, M. (1924).
+%  \"{U}ber die bausteine der mathematischen logik.
+%  \emph{Mathematische Annalen} (in German) 92: 305—316
+%
+%\bibitem{curry}
+%  Curry, H. B. (1930)
+%  Grundlagen der kombinatorischen logik
+%  \emph{American Journal of Mathematics} (in German) 52 (3): 509–536.
+%
+%\end{thebibliography}
+\end{document}
+
