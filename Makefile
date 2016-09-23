@@ -8,6 +8,9 @@ all: $(OBJ)
 %.pdf: %.tex
 	$(TEX) $(@:.pdf=.tex)
 
+post: proposal.pdf
+	scp proposal.pdf me@lucasem.com:docs/context_proposal.pdf
+
 clean:
 	$(RM) *.aux *.log *.out
 

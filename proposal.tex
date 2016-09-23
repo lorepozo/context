@@ -6,7 +6,7 @@
 \pagenumbering{gobble}
 
 
-\title{{\Large Integrated Least Effort Knowledge Networks}}
+\title{{\Large Contextual learning via integrated least effort knowledge networks}}
 \author{Lucas E. Morales \texttt{\{lucasem\}}}
 \date{}
 
@@ -25,16 +25,18 @@ context must motivate certain atoms of knowledge to be readily available
 while setting others further apart, depending on their relationships to
 those in contextual proximity.
 
-Knowledge can be represented as distinct atoms of information and their
-relations in the structure of a connected network. The network is
-constructed by preferential ``least effort'' attachment \cite{cancho03},
-where the learning of a new atom of knowledge joins the network with
-relations to the contextual knowledge from which it was learned. This
-network conforms to a mathematical pattern known as Zipf's Law
-\cite{zipf49}, where the degree of connectivity for nodes in the network
-follow a class of power law distributions \cite{barabasi99}. A similar
-pattern arises in social networks, the webgraph of the Internet, and the
-statistics of linguistic distribution \cite{clauset09}.
+This project introduces the knowledge network (KN) framework, capable of
+contextualizing knowledge in an abstract manner. Knowledge can be
+represented as distinct atoms of information and their relations in the
+structure of a connected network. The network is constructed by preferential
+``least effort'' attachment \cite{cancho03}, where the learning of a new
+atom of knowledge joins the network with relations to the contextual
+knowledge from which it was learned. This network conforms to a mathematical
+pattern known as Zipf's Law \cite{zipf49}, where the degree of connectivity
+for nodes in the network follow a class of power law distributions
+\cite{barabasi99}. A similar pattern arises in social networks, the webgraph
+of the Internet, and the statistics of linguistic distribution
+\cite{clauset09}.
 
 % Creation of such a system, built on existing learning mechanisms, requires
 % the completion of subtasks as follows:
@@ -55,33 +57,34 @@ statistics of linguistic distribution \cite{clauset09}.
 \section{Relevant Works}
 
 In the discipline of artificial intelligence, much effort is placed on
-designing accurate learning mechanisms.
-These learning mechanisms are generally either designed for a particular
-domain, or
-designed to specialize given consistent domain-specific input.
+designing accurate learning mechanisms. These learning mechanisms are
+either designed for a particular domain, or designed to specialize
+given consistent domain-specific input.
 
 Special-purpose learning mechanisms include visual object recognition
-systems based on the human visual cortex \cite{serre07}, program learning
-\cite{liang10}, visual feature modification of images \cite{kulkarni15}, and
-sound texture perception and synthesis \cite{mcdermott11}.
+systems based on the human visual cortex \cite{serre07}, handwritten
+character identification and generation \cite{lake15}, visual feature
+modification of images \cite{kulkarni15}, and sound texture perception and
+synthesis \cite{mcdermott11}.
 
-Specializable learning mechanisms include hierarchical Bayesian methods
-\cite{tenenbaum01}, inductive logic programming \cite{lavrac94}, generative
-adversarial networks \cite{goodfellow14}, and search on a context-free
-grammar \cite{piantadosi12}.
+General-purpose learning mechanisms include hierarchical Bayesian methods
+\cite{tenenbaum01}, program learning \cite{lake15}\cite{liang10}, inductive
+logic programming \cite{lavrac94}, and generative adversarial networks
+\cite{goodfellow14}.
 
 Each of these mechanisms are remarkable in a specified manner, but lack the
 generality that is apparent in human cognition. This is the problem of
 \emph{knowledge}, and most learning mechanisms have some internal
 representation for it. Those representations are mechanism-specific, and
 generally have a flat hierarchy (i.e. where all knowledge is, in some
-manner, equidistant). A flat representation of knowledge is flawed in
-modeling cognition because it reduces capability of specialization in
-multiplicity by making all knowledge focused in the single domain that the
-learning mechanism is confined in. Attempts have not been made in alignment
-with the goals of the knowledge network this proposal aims to build, to
-design and augment learning mechanisms around \emph{contextual} knowledge in
-a manner that is inter-operable between distinct learning mechanisms.
+manner, equidistant). Making all knowledge flat and focused in the single
+domain that the learning mechanism is confined in is flawed as a model of
+cognition because it reduces capability of both handling very complex
+problems and specializing in multiplicity. Attempts have not been made in
+alignment with the goals of the knowledge network this proposal aims to
+build, to design and augment learning mechanisms around \emph{contextual}
+knowledge in a manner that reduces the intractability of hard problems and
+is inter-operable between distinct learning mechanisms.
 
 \begin{thebibliography}{}
   \bibitem{cancho03} i Cancho, R. F., \& Ricard V. Solé. (2003)
@@ -96,17 +99,13 @@ a manner that is inter-operable between distinct learning mechanisms.
   \bibitem{clauset09} Clauset A., Shalizi, C. R., \& Newman M. E. J.  (2009)
     Power-law distributions in empirical data.
     \emph{SIAM Review} 51(4), 661-703 (arXiv:0706.1062, doi:10.1137/070710111)
-%  \bibitem{lake15} Lake, B. M., Salakhutdinov, R., \& Tenenbaum, J. B. (2015).
-%    Human-level concept learning through probabilistic program induction.
-%    \emph{Science}, 350(6266), 1332-1338.
   \bibitem{serre07}
     Serre, T., Oliva, A., \& Poggio, T. (2007).
     A feedforward architecture accounts for rapid categorization.
     In \emph{Proceedings of the National Academy of Sciences}, 104(15), 6424-6429.
-  \bibitem{liang10}
-    Liang, P., Jordan, M. I., \& Klein, D. (2010).
-    Learning programs: a hierarchical Bayesian approach.
-    \emph{International Conference on Machine Learning}: 639–646
+  \bibitem{lake15} Lake, B. M., Salakhutdinov, R., \& Tenenbaum, J. B. (2015).
+    Human-level concept learning through probabilistic program induction.
+    \emph{Science}, 350(6266), 1332-1338.
   \bibitem{kulkarni15}
     Kulkarni, T. D., Whitney, W. F., Kohli, P., \& Tenenbaum, J. (2015).
       Deep convolutional inverse graphics network.
@@ -120,6 +119,10 @@ a manner that is inter-operable between distinct learning mechanisms.
       The rational basis of representativeness.
       In \emph{Proceedings of the 23rd annual conference of the Cognitive
       Science Society} (p. 103641).
+  \bibitem{liang10}
+    Liang, P., Jordan, M. I., \& Klein, D. (2010).
+    Learning programs: a hierarchical Bayesian approach.
+    \emph{International Conference on Machine Learning}: 639–646
   \bibitem{lavrac94}
     Lavrac, N., \& Dzeroski, S. (1994).
       Inductive Logic Programming.
@@ -129,10 +132,6 @@ a manner that is inter-operable between distinct learning mechanisms.
       Ozair, S., ... \& Bengio, Y. (2014).
       Generative adversarial nets.
       In \emph{Advances in Neural Information Processing Systems} (pp. 2672-2680).
-  \bibitem{piantadosi12}
-    Piantadosi, S. T., Tenenbaum, J. B., \& Goodman, N. D. (2012).
-      Bootstrapping in a language of thought: A formal model of numerical concept learning.
-      \emph{Cognition}, 123(2), 199-217.
 \end{thebibliography}
 
 \end{document}
