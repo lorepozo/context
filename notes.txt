@@ -1,7 +1,0 @@
-- Start with just the context (multiple specializations) either EC from
-  Dechter's modular concept discovery paper, or something like Metagol.
-- Interface:
-  - Get() {Item}
-  - Explore(itemID)
-  - Add(item)
-  - ForceConnect(itemID, itemID)
