@@ -3,12 +3,11 @@
 \usepackage{graphicx}
 \usepackage[font=footnotesize,labelfont=bf,width=5in]{caption}
 
-\renewcommand{\baselinestretch}{1.2}
+\renewcommand{\baselinestretch}{1.3}
 
-\title{{\Large SuperUROP Proposal:\\
-Contextual Learning with Integrated Least Effort Knowledge Networks}}
+\title{{Contextual Learning with Integrated Least Effort Knowledge Networks}}
 \author{Lucas E. Morales \texttt{\{lucasem\}}\\
-Supervised by: Joshua Tenenbaum \texttt{\{jbt\}}}
+Principal Invesigator: Joshua Tenenbaum \texttt{\{jbt\}}}
 \date{}
 
 
@@ -17,16 +16,15 @@ Supervised by: Joshua Tenenbaum \texttt{\{jbt\}}}
 \maketitle
 
 \begin{abstract}
-  In the field of artifical intelligence, there are many remarkable
-  mechanisms for learning in a specified manner, but these lack the
-  generality that is apparent in human cognition. Most learning mechanisms
-  are either inherently specialized or have a flat knowledge base that makes
-  them only useful when confined to a single domain. This is flawed as a
+  In the field of artificial intelligence, most learning mechanisms are
+  either inherently specialized or have a flat knowledge base that makes
+  them only useful when confined to a single domain, which is flawed as a
   model of cognition because it reduces capability of both handling very
   complex problems and specializing in multiple domains. This project is to
-  design a contextual knowledge system and to augment learning mechanisms to
-  utilize it in a manner that reduces the intractability of hard problems by
-  creating implicit relationships between knowledge in a scale-free network.
+  design a contextual knowledge system called Scale-free Knowledge Network
+  (SKN). We augment learning mechanisms to utilize this knowledge system in
+  a manner that reduces the intractability of hard problems by creating
+  implicit relationships between items of knowledge.
 \end{abstract}
 
 
@@ -40,8 +38,8 @@ context must motivate certain atoms of knowledge to be readily available
 while setting others further apart, depending on their relationships to
 those in contextual proximity.
 
-This project introduces the SKN framework ({\bf S}cale-free {\bf K}nowledge
-{\bf N}etwork), capable of contextualizing knowledge in an abstract manner.
+We present the SKN framework ({\bf S}cale-free {\bf K}nowledge {\bf
+N}etwork), capable of contextualizing knowledge in an abstract manner.
 Knowledge can be represented as distinct atoms of information and their
 relations in the structure of a connected network. The network is
 constructed by preferential ``least effort'' attachment
@@ -105,7 +103,7 @@ implicitly relating knowledge in a non-flat structure.
 
 \section{Technical Approach}
 
-\begin{figure}[ht]
+\begin{figure}[h]
 \centering
 \includegraphics[scale=.5]{sf_add.eps}
 \caption{The first pane shows a knowledge network, and a shaded region
@@ -152,27 +150,35 @@ sub-network of the context is also scale-free to allow for easy traversal of
 both specialized and generally useful knowledge.
 
 
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.5]{exps.eps}
+\caption{Domains for test experiments. Items in each of these three domains
+  have substructures of modular concepts which are useful across many tasks,
+  making them fitting domains to utilize contextual knowledge.}
+\label{fig:exps}
+\end{figure}
+
 \section{Evaluation Metrics}
 
 To experiment with SKN, consider the class of problems for which this system
 would excel: complex domains where modular knowledge improves the efficiency
 of completing relevant tasks. We augment a system for learning via iterative
 modular concept discovery --- the EC algorithm \cite{dechter13} --- to
-interface with SKN rather than use a flat set of knowledge items. The
-augmented EC algorithm will be tested in the domains of letter analogies
-\cite{hofstadter94}, L-systems \cite{rozenberg80}, and Boolean circuits
-illustrated in Figure \ref{fig:exps}, and compared to the original EC algorithm in the as
-well as a baseline of search without knowledge assistance. These problem
-domains were chosen because they each have potential for common underlying
-structure between tasks. Results will be compared on the number of tasks
-solved given number of iterations for the algorithm.
-
-\begin{figure}[h]
-\centering
-\includegraphics[scale=.5]{exps.eps}
-\caption{Domains for test experiments.}
-\label{fig:exps}
-\end{figure}
+interface with SKN rather than use the traditional flat set of knowledge
+items. The EC algorithm performs search on a stochastic grammar that is
+expressive in a particular problem domain, and modifies the grammar's
+generative distribution to include learned modular concepts which are useful
+in representing tasks. The augmentation to utilize SKN will treat the
+generative distribution as a mixture model that uses concepts which are
+stored in the context. The augmented EC algorithm will be tested in the
+domains of letter analogies \cite{hofstadter94}, L-systems
+\cite{rozenberg80}, and Boolean circuits illustrated in Figure
+\ref{fig:exps}, and compared to the original EC algorithm as well as a
+baseline of search without knowledge assistance. These problem domains were
+chosen because they each have potential for common underlying structure
+between tasks. Results will be compared on the number of tasks solved given
+number of iterations for the algorithm.
 
 
 \section{Conclusion}
@@ -205,10 +211,12 @@ between mechanisms, the mechanisms would be more fittingly referred to as
 \begin{itemize}
   \item September-October --- preliminary formalization, decide on
     experiments.
-  \item November-January --- preliminary implementation, completed
+  \item November-December --- preliminary implementation, completed
     formalization.
-  \item February --- finalize implementation.
-  \item March-April --- complete paper writeup.
+  \item January-February --- finalize implementation, complete
+    experimentation.
+  \item March-April --- prepare writeup for submission to the AGI
+    conference, as well as a workshop for the UAI or IJCAI conferences.
 \end{itemize}
 
 
