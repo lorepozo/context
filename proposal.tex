@@ -38,15 +38,14 @@ context must motivate certain atoms of knowledge to be readily available
 while setting others further apart, depending on their relationships to
 those in contextual proximity.
 
-We present the SKN framework ({\bf S}cale-free {\bf K}nowledge {\bf
-N}etwork), capable of contextualizing knowledge in an abstract manner.
-Knowledge can be represented as distinct atoms of information and their
-relations in the structure of a connected network. The network is
-constructed by preferential ``least effort'' attachment
-\cite{barabasi99}\cite{cancho03}, where the learning of a new atom of
-knowledge joins the network with relations to the contextual knowledge from
-which it was learned based on memory access. This network is scale-free ---
-it conforms to a mathematical pattern similar to that of Zipf's Law
+To contextualize knowledge in an abstract manner, we develop the SKN
+framework ({\bf S}cale-free {\bf K}nowledge {\bf N}etwork). Knowledge is
+represented as distinct atoms of information and their relations in the
+structure of a connected network. The network is constructed by preferential
+``least effort'' attachment \cite{barabasi99}\cite{cancho03}, where the
+learning of a new atom of knowledge joins the network with relations to the
+contextual knowledge from which it was learned. This network is scale-free
+--- it conforms to a mathematical pattern similar to that of Zipf's Law
 \cite{zipf49}, where the degree of connectivity for nodes in the network
 follow a class of power law distributions.
 
@@ -91,10 +90,10 @@ problem-solving into memory, where chunking is essentially a form of
 learning by generation of production rules with implicit generalization
 about the context it informs. Soar doesn't have implicit relationships
 between items of knowledge like ACT*, and has limited explicit relationships
-about context as a hierarchical tuple of subgoals, problem spaces, states, and
-operators (hierarchical in that if an item of the tuple is specified, all
-subsequent items are nullable). Soar relies on efficient chunking to reduce
-the complexity of problem solving.
+about context as a hierarchical tuple of subgoals, problem spaces, states,
+and operators (hierarchical in that if an item of the tuple is specified,
+all subsequent items are nullable). Soar relies on efficient chunking to
+reduce the complexity of problem solving.
 
 The goals of SKN are to augment learning mechanisms around \emph{contextual}
 knowledge in a manner that reduces the intractability of hard problems by
@@ -113,6 +112,21 @@ implicitly relating knowledge in a non-flat structure.
   additional item of knowledge.}
 \label{fig:sf_add}
 \end{figure}
+
+The SKN system implements a knowledge abstraction. The system is implemented
+as an object with methods defining an interface, outlined in Table
+\ref{tab:sf_get}, where {\tt Item} is a structure containing a unique
+identifier, a symbolic tag denoting which mechanism can understand the
+content, and the arbitrary content itself. The {\tt Add} method adds the given
+item to the network based on least effort attachment according to the
+frequency of memory accesses to knowledge items leading up to the addition,
+illustrated in Figure \ref{fig:sf_add}. Only the {\tt Add} and {\tt Explore}
+methods have the potential to augment the active context.
+
+The context itself is of constant size in the asymptotic sense, in that it
+may vary but not as a function of the size of the knowledge-base. The
+sub-network of the context is also scale-free to allow for easy traversal of
+both specialized and generally useful knowledge.
 
 \begin{table}[h]
   \begin{center}
@@ -134,21 +148,7 @@ implicitly relating knowledge in a non-flat structure.
 \end{table}
 
 
-The SKN system implements a knowledge abstraction. The system is implemented
-as an object with methods defining an interface, outlined in Table
-\ref{tab:sf_get}, where {\tt Item} is a structure containing a unique
-identifier, a symbolic tag denoting which mechanism can understand the
-content, and the arbitrary content itself. The {\tt Add} method adds the given
-item to the network based on least effort attachment according to the
-frequency of memory accesses to knowledge items leading up to the addition,
-illustrated in Figure \ref{fig:sf_add}. Only the {\tt Add} and {\tt Explore}
-methods have the potential to augment the active context.
-
-The context itself is of constant size in the asymptotic sense, in that it
-may vary but not as a function of the size of the knowledge-base. The
-sub-network of the context is also scale-free to allow for easy traversal of
-both specialized and generally useful knowledge.
-
+\section{Evaluation Metrics}
 
 \begin{figure}[h]
 \centering
@@ -159,26 +159,26 @@ both specialized and generally useful knowledge.
 \label{fig:exps}
 \end{figure}
 
-\section{Evaluation Metrics}
-
 To experiment with SKN, consider the class of problems for which this system
 would excel: complex domains where modular knowledge improves the efficiency
-of completing relevant tasks. We augment a system for learning via iterative
-modular concept discovery --- the EC algorithm \cite{dechter13} --- to
-interface with SKN rather than use the traditional flat set of knowledge
-items. The EC algorithm performs search on a stochastic grammar that is
-expressive in a particular problem domain, and modifies the grammar's
-generative distribution to include learned modular concepts which are useful
-in representing tasks. The augmentation to utilize SKN will treat the
-generative distribution as a mixture model that uses concepts which are
-stored in the context. The augmented EC algorithm will be tested in the
-domains of letter analogies \cite{hofstadter94}, L-systems
+of completing relevant tasks. There are many learning mechanisms which are
+suitable for experimentation, such as inductive logic programming (ILP)
+systems or algorithms which perform search on a grammar. Distinct items of
+knowledge for ILP systems could be sets of predicates, and for grammar
+search systems they could be language artifacts which construct a mixture
+model on which search is performed.
+
+\newpage
+We augment an algorithm which performs search on a learned expressive
+grammar, the EC algorithm \cite{dechter13}. The augmentation will define the
+grammar based on learned language artifacts stored in the context, rather
+than artifacts stored in a small bounded set. The modified EC algorithm will
+be tested in the domains of letter analogies \cite{hofstadter94}, L-systems
 \cite{rozenberg80}, and Boolean circuits illustrated in Figure
-\ref{fig:exps}, and compared to the original EC algorithm as well as a
-baseline of search without knowledge assistance. These problem domains were
-chosen because they each have potential for common underlying structure
-between tasks. Results will be compared on the number of tasks solved given
-number of iterations for the algorithm.
+\ref{fig:exps}. These problem domains were chosen because they each have
+potential for common underlying structure between tasks. Results will be
+compared to the original EC algorithm on number of tasks solved given number
+of iterations for the algorithm.
 
 
 \section{Conclusion}
