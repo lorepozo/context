@@ -1,0 +1,20 @@
+I'm Lucas, an "undergraduate research and innovation scholar" doing research
+under Josh Tenenbaum in computational cognitive science.
+
+In AI, learning mechanisms are either special-purpose --- designed for a
+particular domain --- or general-purpose --- designed to work well in many
+domains. Unfortunately, general-purpose mechanisms are only practically
+useful when confined to a single domain.
+
+My project aims to alleviate this shortcoming by introducing _context_ as a
+relevant subset of an larger knowledge network, which is automatically
+constructed by least effort attachment. I've designed this system with
+inspiration from patterns found in natural language and social networks. I'm
+currently still implementing this system, but I will apply it to a program
+learning mechanism where I anticipate tasks to be solved faster when exposed
+to broader domains of problems.
+
+In the future, many learning mechanisms could be connected to the same
+network to help automate multi-modal learning. Additionally, communication
+between mechanisms could permit hierarchies of agents, providing a good
+abstraction for meta-interpretive learning, among things.
