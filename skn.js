@@ -16,13 +16,13 @@ class SKN {
       let counter = new Counter(this.mechanisms.size)
       let ctx = this.newContext(counter)
       this.mechanisms.forEach(mech => {
-        mech.emit('iteration', counter, ctx, config.sensory[mech.name](t))
+        mech.emit('iteration', counter, ctx.for(mech.name), config.sensory[mech.name](t))
       })
     }
   }
   newContext(counter) {
     let callback = () => {} // TODO
-    return this.kn.NewContext(counter, callback)
+    return this.kn.newContext(counter, callback)
   }
 }
 
