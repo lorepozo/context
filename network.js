@@ -4,8 +4,9 @@ const ADD = new Symbol('add')
 
 // Item stores .id and .data
 class Item {
-  constructor(kn, id, data) {
+  constructor(kn, mechName, id, data) {
     this.kn = kn
+    this.mechName = mechName
     this.id = id
     this._data = data
     this.history = [] // time-series of data accesses
@@ -34,7 +35,7 @@ class Action {
     case ORIENT:
       kn.orient(this.obj.id)
     case ADD:
-      kn.add(this.obj.ctx, this.obj.data)
+      kn.add(this.obj.ctx, this.name, this.obj.data)
     }
   }
 }
@@ -83,9 +84,9 @@ class Network {
     assert(this.vertices.has(id))
     this.orients[this.epoch++] = id
   }
-  add(ctx, data, epoch) {
+  add(ctx, mechName, data, epoch) {
     let id = this.nextId++
-    this.vertices[id] = new Item(this, id, data)
+    this.vertices[id] = new Item(this, mechName, id, data)
     let counts = this.ctx.items.map(item => { id: item.id, count: item.countSince(ctx.epoch) })
     let sum = counts.reduce( (a, b) => a.count + b.count )
     if (sum == 0) {
@@ -105,6 +106,7 @@ class Network {
     }
     // still no connections? assign each item to a region in the
     // interval [0,1] of size count/sum, then use random() to pick.
+    // this is equivalent to one time-step of a CRP with no new tables.
     if (this.graph[id].size == 0) {
       let r = Math.random()
       for (const item of counts) {
