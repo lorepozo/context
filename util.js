@@ -3,7 +3,7 @@ const {EventEmitter} = require('events')
 // Counter emits a 'done' event once it has been triggered a
 // specified number of times. A counter is triggered when the
 // done() method is called.
-export class Counter extends EventEmitter {
+class Counter extends EventEmitter {
   constructor(total) {
     this.count = this.total = total
     this.hasFired = false
@@ -17,6 +17,10 @@ export class Counter extends EventEmitter {
   }
 }
 
-export flip(p) {
+function flip(p) {
   return Math.random() < p
 }
+
+
+module.exports = { Counter, flip }
+

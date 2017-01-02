@@ -121,3 +121,5 @@ class Network {
     return new Context(counter, this, items, frontier, this.epoch, callback)
   }
 }
+
+module.Exports = { Network }
