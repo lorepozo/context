@@ -1,4 +1,4 @@
-TEX = lualatex -shell-escape -interaction=nonstopmode -file-line-error
+TEX = xelatex -shell-escape -interaction=nonstopmode -file-line-error
 
 PRE := $(wildcard ./*.tex)
 OBJ := $(PRE:%.tex=%.pdf)
