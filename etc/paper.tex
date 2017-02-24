@@ -217,16 +217,7 @@ others, naturally resulting in memory accesses that are proportional to
 their high utility and thus correlated with high degree of connectivity in
 the network.
 
-\section{Evaluation Metrics}
-
-\begin{figure}[h]
-\centering
-\includegraphics[scale=.5]{exps.eps}
-\caption{Domains for test experiments. Items in each of these three domains
-  have substructures of modular concepts which are useful across many tasks,
-  making them fitting domains to utilize contextual knowledge.}
-\label{fig:exps}
-\end{figure}
+\section{Experiments}
 
 To experiment with SKN, consider the class of problems for which this system
 would excel: complex domains where modular knowledge improves the efficiency
@@ -240,13 +231,12 @@ model on which search is performed.
 We augment an algorithm which performs search on a learned expressive
 grammar, the EC algorithm \cite{dechter13}. The augmentation will define the
 grammar based on learned language artifacts stored in the context, rather
-than artifacts stored in a small bounded set. The modified EC algorithm will
-be tested in the domains of letter analogies \cite{hofstadter94}, L-systems
-\cite{rozenberg80}, and Boolean circuits illustrated in Figure
-\ref{fig:exps}. These problem domains were chosen because they each have
+than artifacts stored in a small bounded set. The augmented EC algorithm
+will be tested in the domain of string transformation, chosen because it has
 potential for common underlying structure between tasks. Results will be
-compared to the original EC algorithm on number of tasks solved given number
-of iterations for the algorithm.
+compared to the original EC algorithm.
+
+This section is very much {\bf TODO}.
 
 
 \section{Conclusion}
