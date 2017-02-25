@@ -188,13 +188,13 @@ knowledge to the network, and adjusts the context to include the new item,
 illustrated in Figure \ref{fig:sf_add}.
 
 The automatic attachment follows a least-effort procedure where the new
-node's connections are determined using a finite approximation of the Indian
-Buffet Process (IBP) \cite{griffiths11}. For every node
-$\mathcal{I}_j\in\{\mathcal{I}_i\}_{i=1}^k$ in the context we have $m_j$, a
-count of accesses to $\mathcal{I}_j$ since the last context-switch.
+node's connections are determined using a popular-based probabilistic subset
+selection technique equivalent to a non-initial iteration of the Indian
+Buffet Process (IBP) with parameter $\alpha=0$ \cite{griffiths11}. For every
+node $\mathcal{I}_j\in\{\mathcal{I}_i\}_{i=1}^k$ in the context we have
+$m_j$, a count of accesses to $\mathcal{I}_j$ since the last context-switch.
 Additionally, we define $M=\sum_{i=1}^km_i$ as the total count of knowledge
-artifact accesses since the last context-switch. In the IBP, the new node
-samples its degree of connectivity from Poisson$(\alpha)$ and attaches to
+artifact accesses since the last context-switch. The new node attaches to
 node $\mathcal{I}_j$ according to Bernoulli$\left(\frac{m_j}{M}\right)$.
 % IBP doesn't guarantee non-empty set:
 If no connections are made for the new node, a single connection is forced
