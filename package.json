@@ -1,9 +1,0 @@
-{
-  "name": "lambda-context",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node ./start.js"
-  },
-  "dependencies": {}
-}
