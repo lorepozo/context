@@ -1,14 +1,31 @@
+#[macro_use]
+extern crate serde_json;
+#[macro_use]
+extern crate serde_derive;
 extern crate rand;
+extern crate tempdir;
 
 pub mod knowledge;
-use knowledge::{Skn, Context};
-
-use rand::distributions::{IndependentSample, Gamma};
+pub mod ec;
 
 fn main() {
-    let t = 20;
-    let embryo = vec![("mech", vec![0, 1, 2, 3])];
-    let mech = |ctx: Context, i| {
+    let t = ec::ITER_MAX;
+    let embryo = ec::embryo();
+    let mech = ec::mech;
+    let mut skn = knowledge::Skn::new(embryo, t);
+    skn.register("ec", &mech);
+    skn.run();
+    println!("{:?}", skn)
+}
+
+#[cfg(test)]
+mod tests {
+    extern crate rand;
+
+    use knowledge::{Context, Skn};
+    use rand::distributions::{IndependentSample, Gamma};
+
+    fn basic_mech(ctx: Context, i: u64) {
         let items = ctx.get();
         let front = ctx.explore();
         println!("looking at iteration {} with {} items in ctx and {} items in frontier",
@@ -27,15 +44,15 @@ fn main() {
         if i % 2 == 0 {
             ctx.grow(vec![i as u8]);
         }
-    };
-    let mut skn = Skn::new(embryo, t);
-    skn.register("test", &mech);
-    skn.run();
-}
-
-#[cfg(test)]
-mod tests {
+    }
 
     #[test]
-    fn it_works() {}
+    fn it_works() {
+        let t = 20;
+        let embryo = vec![("mech", vec![0, 1, 2, 3])];
+        let mech = basic_mech;
+        let mut skn = Skn::new(embryo, t);
+        skn.register("test", &mech);
+        skn.run();
+    }
 }

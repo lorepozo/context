@@ -1,0 +1,24 @@
+{ "grammar": [],
+  "tasks": [
+  { "problems": [
+    { "i":"IaN", "o":"Ian" },
+    { "i":"MELVIN", "o":"Melvin" },
+    { "i":"miKe", "o":"Mike" },
+    { "i":"StaNleY", "o":"Stanley" },
+    { "i":"mary", "o":"Mary" }
+  ], "name":"IaN -> Ian"},
+  { "problems": [
+    { "i":"thomas", "o":"Thomas" },
+    { "i":"james", "o":"James" },
+    { "i":"chris", "o":"Chris" },
+    { "i":"charles", "o":"Charles" },
+    { "i":"paul", "o":"Paul" }
+  ], "name":"thomas -> Thomas"},
+  { "problems": [
+    { "i":"My name is Richard", "o":"Richard" },
+    { "i":"My name is John", "o":"John" },
+    { "i":"My name is Josh", "o":"Josh" },
+    { "i":"My name is Bill", "o":"Bill" },
+    { "i":"My name is Albert", "o":"Albert" }
+  ], "name":"My name is Richard -> Richard"}
+]}

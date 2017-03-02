@@ -1,0 +1,24 @@
+{ "grammar": [],
+  "tasks": [
+  { "problems": [
+    { "i":"Marin Lorentzen", "o":"M.L." },
+    { "i":"Annita Nicely", "o":"A.N." },
+    { "i":"Joanie Faas", "o":"J.F." },
+    { "i":"Oma Cornelison", "o":"O.C." },
+    { "i":"Verlene Ottley", "o":"V.O." }
+  ], "name":"Marin Lorentzen -> M.L."},
+  { "problems": [
+    { "i":"Arthur Joe Juan", "o":"A.J.J." },
+    { "i":"Donald Steven George", "o":"D.S.G." },
+    { "i":"Kevin Jason Matthew", "o":"K.J.M." },
+    { "i":"Jose Larry Scott", "o":"J.L.S." },
+    { "i":"Raymond Frank Timothy", "o":"R.F.T." }
+  ], "name":"Arthur Joe Juan -> A.J.J."},
+  { "problems": [
+    { "i":"3113 Greenfield Ave. Los Angeles CA 90034", "o":"CA" },
+    { "i":"43 St. Margaret St. #1 Dorchester MA 02145", "o":"MA" },
+    { "i":"3 Ames St. Portland OR 02142", "o":"OR" },
+    { "i":"47 Foskett St. #2 Cambridge MA 02144", "o":"MA" },
+    { "i":"43 Vassar St. 46-4053 Cambridge MA 02139", "o":"MA" }
+  ], "name":"3113 Greenfield Ave. Los Angeles CA 90034 -> CA"}
+]}

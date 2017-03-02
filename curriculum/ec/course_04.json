@@ -1,0 +1,24 @@
+{ "grammar": [],
+  "tasks": [
+  { "problems": [
+    { "i":"ruby.clinton", "o":"ruby clinton" },
+    { "i":"josh.smith", "o":"josh smith" },
+    { "i":"matthew.rosman", "o":"matthew rosman" },
+    { "i":"brent.harold", "o":"brent harold" },
+    { "i":"jim.james", "o":"jim james" }
+  ], "name":"ruby.clinton -> ruby clinton"},
+  { "problems": [
+    { "i":"ruby clinton", "o":"ruby.clinton" },
+    { "i":"josh smith", "o":"josh.smith" },
+    { "i":"matthew rosman", "o":"matthew.rosman" },
+    { "i":"brent harold", "o":"brent.harold" },
+    { "i":"jim james", "o":"jim.james" }
+  ], "name":"ruby clinton -> ruby.clinton"},
+  { "problems": [
+    { "i":"ruby", "o":"r" },
+    { "i":"josh", "o":"j" },
+    { "i":"matthew", "o":"m" },
+    { "i":"brent", "o":"b" },
+    { "i":"jim", "o":"j" }
+  ], "name":"ruby -> r"}
+]}

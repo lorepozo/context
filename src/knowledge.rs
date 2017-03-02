@@ -3,6 +3,7 @@ extern crate rand;
 use std::cmp::{min, max};
 use std::collections::{BTreeMap, HashSet, HashMap};
 use std::cell::RefCell;
+use std::fmt;
 use std::rc::Rc;
 
 use rand::distributions::{IndependentSample, Range};
@@ -15,6 +16,16 @@ struct Item {
     data: Rc<Vec<u8>>,
     counts: BTreeMap<usize, u64>,
     adj: HashSet<usize>,
+}
+impl fmt::Debug for Item {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,
+               "Item {{ mech: {}, data: {}, counts: {:?}, adj: {:?} }}",
+               self.mech,
+               String::from_utf8((*self.data).clone()).unwrap(),
+               self.counts,
+               self.adj)
+    }
 }
 
 impl Item {
@@ -70,6 +81,7 @@ impl Context {
     }
 }
 
+#[derive(Debug)]
 struct Net {
     /// The minimum context size, used only if larger than embryo size (otherwise the embryo size
     /// is used). The context size may grow from this amount as the network grows.
@@ -298,6 +310,12 @@ pub struct Skn<'a> {
     network: Network,
     reg: MechanismRegistry<'a>,
     t: u64,
+}
+impl<'a> fmt::Debug for Skn<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let net = self.network.net.borrow();
+        write!(f, "{:?}", net)
+    }
 }
 
 impl<'a> Skn<'a> {

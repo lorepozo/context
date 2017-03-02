@@ -5,3 +5,7 @@ authors = ["Lucas Morales <lucas@lucasem.com>"]
 
 [dependencies]
 rand = "0.3"
+serde = "0.9"
+serde_derive = "0.9"
+serde_json = "0.9"
+tempdir = "0.3"
