@@ -159,13 +159,14 @@ to the World Wide Web operating at a higher level over the Internet.
   \begin{center}
   \begin{tabular}{|l|p{4in}|}
     \hline
-    {\tt Get() \{Item\}}     & Yields the set of items in the active context \\
-                               \hline
-    {\tt Explore() \{Item\}} & Yields the set of items within one edge of
-                               the active context \\ \hline
-    {\tt Orient(ID)}         & Shifts context to focus on the item identified
-                               by the given ID \\ \hline
-    {\tt Add(Item)}          & Adds an item to the knowledge network \\ \hline
+    {\sc Get() $\{\mathcal{I}\}$}     & Yields the set of items in the
+      active context \\ \hline
+    {\sc Explore() $\{\mathcal{I}\}$} & Yields the set of items within one
+      edge of the active context \\ \hline
+    {\sc Orient($\mathcal{I}$)}       & Shifts context to focus on the given
+      item \\ \hline
+    {\sc Add($\mathcal{I}$)}          & Adds an item to the knowledge
+      network \\ \hline
   \end{tabular}
   \end{center}
 \caption{Methods on an instance of the knowledge network.}
@@ -178,17 +179,18 @@ non-hierarchical sets or addressed memory. We refer to a small motivated
 subnet of the knowledge network as the {\em context}. We provide a simple
 interface for interacting with knowledge where all interactions either
 retrieve information related to the current context or adjust the context
-within the knowledge network, outlined in Table \ref{tab:sf_get}, where {\tt
-Item} is a structure containing a unique identifier, a symbolic tag denoting
-which mechanism can understand the item's content, and the arbitrary content
-itself. Only the {\tt Add} and {\tt Orient} methods have the potential to
-augment the active context. The context itself is sized according to the
-maximum degree of a node in a scale-free network, based on network size $N$
-and degree exponent $\gamma$ satisfying $2<\gamma<3$:
-\[k_{\text{max}} \sim N^{\frac1{\gamma-1}}\]
-The {\tt Add} method automatically adds a new item of
-knowledge to the network, and adjusts the context to include the new item,
-illustrated in Figure \ref{fig:sf_add}.
+within the knowledge network, outlined in Table \ref{tab:sf_get}, where
+$\mathcal{I}$ refers to a knowledge artifact and is a structure containing a
+unique identifier, a symbolic tag denoting which mechanism can understand
+the item's content, and the arbitrary content itself. Only the {\sc
+Add($\mathcal{I}$)} and {\sc Orient($\mathcal{I}$)} methods have the
+potential to augment the active context. The context itself is sized
+according to the maximum degree of a node in a scale-free network, based on
+network size $N$ and degree exponent $\gamma$ satisfying $2<\gamma<3$:
+\[k_{\text{max}} \sim N^{\frac1{\gamma-1}}\] The {\sc Add($\mathcal{I}$)}
+method automatically adds a new item of knowledge to the network, and
+adjusts the context to include the new item, illustrated in Figure
+\ref{fig:sf_add}.
 
 The automatic attachment follows a least-effort procedure where the new
 node's connections are determined using a popular-based probabilistic subset
@@ -231,27 +233,55 @@ artifacts for ILP systems could be sets of predicates, and for grammar
 search systems they could be language artifacts which construct a mixture
 model on which search is performed.
 
+\subsection{Learning Grammars}
 We augment an algorithm which performs search on a learned expressive
-grammar, the EC algorithm \cite{dechter13}. The augmentation will define the
+grammar, the EC algorithm \cite{dechter13}. The augmentation defines the
 grammar based on learned language artifacts stored in the context, rather
-than artifacts stored in a small bounded set. The augmented EC algorithm
-will be tested in the domain of string transformation, chosen because it has
-potential for common underlying structure between tasks. Results will be
-compared to the original EC algorithm.
+than artifacts stored in a small bounded set. We use SKN iteratively and
+refer to the complete set of tasks as the {\em curriculum}, and each
+iteration as a {\em phase}. Within each phase lies a set of tasks used with
+a number of iterations of the EC algorithm. At the end of each phase, we
+interact with the knowledge network.
 
-This section is very much {\bf TODO}.
+The initial grammar employed by the EC algorithm at the beginning of each
+phase is defined using the set of combinators in the current context:
+\[C = \bigcup\text{\sc Get()} = \bigcup_{i=1}^k\mathcal{I}_i\]
+At the end of each phase, we must determine whether the context should be
+adjusted (and if so, where to adjust it) and whether to add a new knowledge
+artifact. We refer to the new set of combinators constructed by the grammar
+learner as $C^*$.
+
+Consider the the set of combinators beyond the context:
+\[C' = \bigcup\text{\sc Explore()}\]
+If the most probable combinator $c_i$ in $C^*$ is also in $C'$, we adjust
+the context according to the knowledge artifact which contains $c_i$:
+\[\exists\mathcal{I}.\mathcal{I}\in\text{\sc Explore()}.c_i\in\mathcal{I}.\text{\sc Orient($\mathcal{I}$)}\]
+We now recompute $C'$ with the new state of the knowledge network. We check
+the $P$ most probable combinators in $C^*$, referred to as $C^P\subseteq
+C^*$, for presence in $C'$, and add a new knowledge artifact with every
+combinator not in $C'$:
+\[\exists\mathcal{I}.\left(\mathcal{I}=C^P\setminus C'\right).
+  |\mathcal{I}|>0.\text{\sc Add($\mathcal{I}$)}\]
+
+The resulting system, parameterized by $P$, is such that the current context
+may appropriately be identified as domain-specific knowledge, where a
+knowledge artifact is a set of combinators which are used as primitives for
+a grammar defined on the context.
+
+The augmented EC algorithm will be tested in the domain of string
+transformation, chosen because it has potential for common underlying
+structure between tasks. This section is very much {\bf TODO} (needs
+results).
 
 
-\section{Conclusion}
+\section{Discussion}
 
 We introduce SKN, a knowledge abstraction to improve learning mechanisms by
 utilizing context in a scale-free network, with the purpose of better
 modeling memory and knowledge in a convenient paradigm that fits both the
 intuitive architecture of cognition and the programmatic methods of
-computation that govern technology.
-
-
-\section{Future Work}
+computation, enabling compositionality and the rapid learning of rich
+models.
 
 The SKN system can be utilized in many different ways. By connecting many
 learning mechanisms to the same knowledge network, interoperability between
@@ -264,8 +294,7 @@ restricted to \emph{learners} --- the introduction of \emph{actors} as
 mechanisms would yield a powerful production system conditioned on
 contextual knowledge and immediate circumstance. Supplemented with support
 for direct communication between mechanisms, the mechanisms would be more
-fittingly referred to as
-\emph{agents} \cite{minsky88}.
+fittingly referred to as \emph{agents} \cite{minsky88}.
 
 
 \begin{thebibliography}{}
