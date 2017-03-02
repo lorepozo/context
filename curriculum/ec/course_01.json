@@ -7,10 +7,10 @@
     { "i":"yet another test", "o":"YET another test" }
   ], "name":"upper first"},
   { "problems": [
-    { "i":"test", "o":"Test" },
-    { "i":"tests", "o":"Tests" },
-    { "i":"test two", "o":"test Two" },
-    { "i":"yet another test", "o":"yet another Test" },
-    { "i":"yet another test", "o":"yet another Test" }
-  ], "name":"cap last"}
+    { "i":"thomas", "o":"Thomas" },
+    { "i":"james", "o":"James" },
+    { "i":"chris", "o":"Chris" },
+    { "i":"charles", "o":"Charles" },
+    { "i":"paul", "o":"Paul" }
+  ], "name":"thomas -> Thomas"}
 ]}

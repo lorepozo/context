@@ -1,17 +1,17 @@
 { "grammar": [],
   "tasks": [
   { "problems": [
-    { "i":"IaN RoDny", "o":"Ian Rodny" },
-    { "i":"MELVIN Julian", "o":"Melvin Julian" },
-    { "i":"miKe dwIGHT", "o":"Mike Dwight" },
-    { "i":"StaNleY TRAVis", "o":"Stanley Travis" },
-    { "i":"mary gelman", "o":"Mary Gelman" }
-  ], "name":"IaN RoDny -> Ian Rodny"},
+    { "i":"IaN", "o":"Ian" },
+    { "i":"MELVIN", "o":"Melvin" },
+    { "i":"miKe", "o":"Mike" },
+    { "i":"StaNleY", "o":"Stanley" },
+    { "i":"mary", "o":"Mary" }
+  ], "name":"IaN -> Ian"},
   { "problems": [
-    { "i":"5/5/1987", "o":"87" },
-    { "i":"1/21/2001", "o":"01" },
-    { "i":"21/1/2001", "o":"01" },
-    { "i":"22.02.2002", "o":"02" },
-    { "i":"2003-23-03", "o":"03" }
-  ], "name":"5/5/1987 -> 87"}
+    { "i":"test", "o":"Test" },
+    { "i":"tests", "o":"Tests" },
+    { "i":"test two", "o":"test Two" },
+    { "i":"yet another test", "o":"yet another Test" },
+    { "i":"yet another test", "o":"yet another Test" }
+  ], "name":"cap last"}
 ]}

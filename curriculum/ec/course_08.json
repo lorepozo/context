@@ -1,17 +1,28 @@
 { "grammar": [],
   "tasks": [
   { "problems": [
-    { "i":"Principals Of Programming Languages", "o":"POPL" },
-    { "i":"Neural Information Processing Systems", "o":"NIPS" },
-    { "i":"International Conferences on Software Engineering", "o":"ICSE" },
-    { "i":"International Conference on Functional Programming", "o":"ICFP" },
-    { "i":"International Business Machines", "o":"IBM" }
-  ], "name":"Principals Of Programming Languages -> POPL"},
+    { "i":"Words that do Not start with Lower", "o":"Words Not Lower" },
+    { "i":"one Two Three four", "o":"Two Three" },
+    { "i":"Hello goodbye", "o":"Hello" }
+  ], "name":"Words that do Not start with Lower -> Words Not Lower"},
   { "problems": [
-    { "i":"ruby.clinton@mit.edu", "o":"Ruby Clinton" },
-    { "i":"josh.smith@gmail.com", "o":"Josh Smith" },
-    { "i":"matthew.rosman@yahoo.com", "o":"Matthew Rosman" },
-    { "i":"brent.harold@hotmail.com", "o":"Brent Harold" },
-    { "i":"jim.james@fas.harvard.edu", "o":"Jim James" }
-  ], "name":"ruby.clinton@mit.edu -> Ruby Clinton"}
+    { "i":"discard,after comma", "o":"discard" },
+    { "i":"one,two three four", "o":"one" },
+    { "i":"one two, three four", "o":"one two" }
+  ], "name":"discard,after comma -> discard"},
+  { "problems": [
+    { "i":"discard@after at", "o":"discard" },
+    { "i":"one@two three four", "o":"one" },
+    { "i":"one two@ three four", "o":"one two" }
+  ], "name":"discard@after at -> discard"},
+  { "problems": [
+    { "i":"before comma,discard", "o":"discard" },
+    { "i":"one,two three four", "o":"two three four" },
+    { "i":"one two three ,four", "o":"four" }
+  ], "name":"before comma,discard -> discard"},
+  { "problems": [
+    { "i":"before angle<discard", "o":"discard" },
+    { "i":"one<two three four", "o":"two three four" },
+    { "i":"one two three <four", "o":"four" }
+  ], "name":"before angle<discard -> discard"}
 ]}

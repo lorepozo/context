@@ -1,24 +1,31 @@
 { "grammar": [],
   "tasks": [
   { "problems": [
-    { "i":"herbert is <2: Marion> morris", "o":"(2 marion)" },
-    { "i":"country music <9: refrigerator>", "o":"(9 refrigerator)" },
-    { "i":"Three <2: vincent> Jeff", "o":"(2 vincent)" },
-    { "i":"Don Kyle <3: ricky sergio> virgil", "o":"(3 ricky)" },
-    { "i":"francisco eduardo <1: apples>", "o":"(1 apple trees)" }
-  ], "name":"herbert is <2: Marion> morris -> (2 marion)"},
+    { "i":"CHORE BOY HD SC SPNG 1PK", "o":"1PK" },
+    { "i":"BTR KRNL WK CORN 15Z", "o":"15Z" },
+    { "i":"CAMP DRY DBL NDL 3.6OZ", "o":"3.6OZ" },
+    { "i":"O F TOMATO PASTE 6OZ", "o":"6OZ" },
+    { "i":"FRENCH WORCESTERSHIRE 5Z", "o":"5Z" }
+  ], "name":"CHORE BOY HD SC SPNG 1PK -> 1PK"},
   { "problems": [
-    { "i":"3 Ames St. Portland OR 02142", "o":"Portland" },
-    { "i":"47 Foskett St. #2 Cambridge MA 02144", "o":"Cambridge" },
-    { "i":"43 Vassar St. 46-4053 Cambridge MA 02139", "o":"Cambridge" },
-    { "i":"3113 Greenfield Ave. Los Angeles CA 90034", "o":"Los Angeles" },
-    { "i":"43 St. Margaret St. #1 Dorchester MA 02145", "o":"Dorchester" }
-  ], "name":"3 Ames St. Portland OR 02142 -> Portland"},
+    { "i":"12012011", "o":"12/01/2011" },
+    { "i":"11152011", "o":"11/15/2011" },
+    { "i":"06222005", "o":"06/22/2005" },
+    { "i":"01252010", "o":"01/25/2010" },
+    { "i":"01112011", "o":"01/11/2011" }
+  ], "name":"12012011 -> 12/01/2011"},
   { "problems": [
-    { "i":"#include <os.h>", "o":"OS" },
-    { "i":"#include <malloc.h>", "o":"MALLOC" },
-    { "i":"#include <stdlib.h>", "o":"STDLIB" },
-    { "i":"#include <sys.h>", "o":"SYS" },
-    { "i":"#include <stdio.h>", "o":"STDIO" }
-  ], "name":"#include <os.h> -> OS"}
+    { "i":"6/23/15", "o":"6.23.2015" },
+    { "i":"4/12/2023", "o":"4.12.2023" },
+    { "i":"1/23/2009", "o":"1.23.2009" },
+    { "i":"12/32/2013", "o":"12.32.2013" },
+    { "i":"7/15/2015", "o":"7.15.2015" }
+  ], "name":"6/23/15 -> 6.23.2015"},
+  { "problems": [
+    { "i":"#include <os.h>", "o":"os.h" },
+    { "i":"#include <malloc.h>", "o":"malloc.h" },
+    { "i":"#include <stdlib.h>", "o":"stdlib.h" },
+    { "i":"#include <sys.h>", "o":"sys.h" },
+    { "i":"#include <stdio.h>", "o":"stdio.h" }
+  ], "name":"#include <os.h> -> os.h"}
 ]}

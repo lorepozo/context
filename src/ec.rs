@@ -12,8 +12,8 @@ use std::process::Command;
 
 use knowledge::Context;
 
-pub const ITER_MAX: u64 = 10;
-const EC_GRAMMAR_INCLUDE_PROGS: bool = true;
+pub const ITER_MAX: u64 = 11;
+const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
 const EC_MAX_IN_ARTIFACT: usize = 20;
 static PRIMS_ARR: [&'static str; 26] = ["' '",
@@ -42,24 +42,6 @@ static PRIMS_ARR: [&'static str; 26] = ["' '",
                                         "substr",
                                         "uncap",
                                         "upper"];
-static EMBRYO: &'static str = r#"[]"#;
-
-fn ec_bin() -> String {
-    if let Ok(val) = env::var("EC") {
-        val
-    } else if Path::new("./ec").exists() {
-        String::from("./ec")
-    } else {
-        String::from("ec") // hopefully it's in $PATH
-    }
-}
-
-pub fn embryo() -> Vec<(&'static str, String)> {
-    vec![("ec", String::from(EMBRYO))]
-}
-fn primitives() -> HashSet<String> {
-    PRIMS_ARR.iter().map(|&s| String::from(s)).collect()
-}
 
 
 mod course {
@@ -82,6 +64,14 @@ mod course {
         } else {
             panic!("could not find ec curriculum")
         }
+    }
+
+    pub fn read_curriculum(name: String) -> String {
+        let path = Path::new(curriculum_path().as_str()).join(name);
+        let mut f = File::open(&path).expect("opening curriculum file");
+        let mut s = String::new();
+        f.read_to_string(&mut s).expect("reading curriculum file");
+        s
     }
 
     #[derive(Serialize, Deserialize)]
@@ -108,11 +98,8 @@ mod course {
     }
     impl Course {
         pub fn load(i: u64) -> Course {
-            let path = Path::new(curriculum_path().as_str()).join(format!("course_{:02}.json", i));
-            let mut f = File::open(&path).expect("opening course file");
-            let mut s = String::new();
-            f.read_to_string(&mut s).expect("reading course file");
-            serde_json::from_str(&s).expect("parsing course file")
+            let s = read_curriculum(format!("course_{:02}.json", i));
+            serde_json::from_str(s.as_str()).expect("parsing course file")
         }
         pub fn merge(&mut self, ctx: &Context) {
             let raw_items = ctx.get()
@@ -139,7 +126,7 @@ mod course {
         }
     }
 }
-use self::course::Course;
+use self::course::{Course, read_curriculum};
 
 
 mod results {
@@ -177,6 +164,26 @@ mod results {
     }
 }
 use self::results::Results;
+
+
+fn ec_bin() -> String {
+    if let Ok(val) = env::var("EC") {
+        val
+    } else if Path::new("./ec").exists() {
+        String::from("./ec")
+    } else {
+        String::from("ec") // hopefully it's in $PATH
+    }
+}
+
+pub fn embryo() -> Vec<(&'static str, String)> {
+    let s = read_curriculum(String::from("embryo.json"));
+    vec![("ec", s)]
+}
+
+fn primitives() -> HashSet<String> {
+    PRIMS_ARR.iter().map(|&s| String::from(s)).collect()
+}
 
 
 fn run_ec(ctx: &Context, i: u64) -> Results {
@@ -229,10 +236,16 @@ fn find_expr_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
 pub fn mech(ctx: Context, i: u64) {
     // run ec
     let results = run_ec(&ctx, i);
-    println!("ec at iteration {} got hit-rate {}/{}",
+    let failures: Vec<&String> = results.programs
+        .iter()
+        .filter(|p| p.result.is_none())
+        .map(|p| &p.task)
+        .collect();
+    println!("ec at iteration {} got hit-rate {}/{}. failed: {:?}",
              i,
              results.hit_rate,
-             results.programs.len());
+             results.programs.len(),
+             failures);
     // retrieve learned combs
     let mut learned: Vec<(String, f64)> = results.grammar
         .iter()
@@ -271,12 +284,12 @@ pub fn mech(ctx: Context, i: u64) {
         .map(|(&(ref s, p), o)| (s, p, o.unwrap())) // s, p, id
         .filter(|&(_, p, _)| p.is_finite())
         .collect();
-    debug_assert!(access_info.is_empty());
     let least = access_info.iter().map(|&(_, p, _)| p).fold(f64::INFINITY, f64::min);
     let most = access_info.iter().map(|&(_, p, _)| p).fold(f64::NEG_INFINITY, f64::max);
     access_info = access_info
         .into_iter()
         .map(|(s, p, id)| (s, EC_ACCESS_FACTOR * (p-least)/(most-least), id)) // normalize
+        .filter(|&(_, f, _)| f.is_finite())
         .collect();
     for comb in &access_info {
         ctx.add_item_count(comb.2, comb.1 as u64);
@@ -293,5 +306,6 @@ pub fn mech(ctx: Context, i: u64) {
         .collect();
     if !new_combs.is_empty() {
         ctx.grow(json!(new_combs).to_string());
+        println!("   ctx.grow({:?})", new_combs)
     }
 }

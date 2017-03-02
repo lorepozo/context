@@ -1,19 +1,19 @@
 { "grammar": [],
   "tasks": [
   { "problems": [
-    { "i":"IaN", "o":"Ian" },
-    { "i":"MELVIN", "o":"Melvin" },
-    { "i":"miKe", "o":"Mike" },
-    { "i":"StaNleY", "o":"Stanley" },
-    { "i":"mary", "o":"Mary" }
-  ], "name":"IaN -> Ian"},
+    { "i":"test", "o":"1" },
+    { "i":"tests", "o":"1" },
+    { "i":"test two", "o":"2" },
+    { "i":"yet another test", "o":"3" },
+    { "i":"yet another test", "o":"3" }
+  ], "name":"length"},
   { "problems": [
-    { "i":"thomas", "o":"Thomas" },
-    { "i":"james", "o":"James" },
-    { "i":"chris", "o":"Chris" },
-    { "i":"charles", "o":"Charles" },
-    { "i":"paul", "o":"Paul" }
-  ], "name":"thomas -> Thomas"},
+    { "i":"test", "o":"test" },
+    { "i":"tests", "o":"tests" },
+    { "i":"test two", "o":"two" },
+    { "i":"yet another test", "o":"test" },
+    { "i":"yet another test", "o":"test" }
+  ], "name":"last"},
   { "problems": [
     { "i":"My name is Richard", "o":"Richard" },
     { "i":"My name is John", "o":"John" },

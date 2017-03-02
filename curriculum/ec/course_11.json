@@ -1,0 +1,24 @@
+{ "grammar": [],
+  "tasks": [
+  { "problems": [
+    { "i":"herbert is <2: Marion> morris", "o":"(2 marion)" },
+    { "i":"country music <9: refrigerator>", "o":"(9 refrigerator)" },
+    { "i":"Three <2: vincent> Jeff", "o":"(2 vincent)" },
+    { "i":"Don Kyle <3: ricky sergio> virgil", "o":"(3 ricky)" },
+    { "i":"francisco eduardo <1: apples>", "o":"(1 apple trees)" }
+  ], "name":"herbert is <2: Marion> morris -> (2 marion)"},
+  { "problems": [
+    { "i":"3 Ames St. Portland OR 02142", "o":"Portland" },
+    { "i":"47 Foskett St. #2 Cambridge MA 02144", "o":"Cambridge" },
+    { "i":"43 Vassar St. 46-4053 Cambridge MA 02139", "o":"Cambridge" },
+    { "i":"3113 Greenfield Ave. Los Angeles CA 90034", "o":"Los Angeles" },
+    { "i":"43 St. Margaret St. #1 Dorchester MA 02145", "o":"Dorchester" }
+  ], "name":"3 Ames St. Portland OR 02142 -> Portland"},
+  { "problems": [
+    { "i":"#include <os.h>", "o":"OS" },
+    { "i":"#include <malloc.h>", "o":"MALLOC" },
+    { "i":"#include <stdlib.h>", "o":"STDLIB" },
+    { "i":"#include <sys.h>", "o":"SYS" },
+    { "i":"#include <stdio.h>", "o":"STDIO" }
+  ], "name":"#include <os.h> -> OS"}
+]}
