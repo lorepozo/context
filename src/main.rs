@@ -42,14 +42,14 @@ mod tests {
         }
         // grow half the time
         if i % 2 == 0 {
-            ctx.grow(vec![i as u8]);
+            ctx.grow(format!("{}", i));
         }
     }
 
     #[test]
     fn it_works() {
         let t = 20;
-        let embryo = vec![("mech", vec![0, 1, 2, 3])];
+        let embryo = vec![("test", String::from("data"))];
         let mech = basic_mech;
         let mut skn = Skn::new(embryo, t);
         skn.register("test", &mech);

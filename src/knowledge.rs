@@ -11,25 +11,16 @@ use rand::distributions::{IndependentSample, Range};
 const CTX_MIN_SIZE: usize = 5;
 const NET_MAX_SIZE: usize = 128;
 
+#[derive(Debug)]
 struct Item {
     mech: &'static str,
-    data: Rc<Vec<u8>>,
+    data: Rc<String>,
     counts: BTreeMap<usize, u64>,
     adj: HashSet<usize>,
 }
-impl fmt::Debug for Item {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f,
-               "Item {{ mech: {}, data: {}, counts: {:?}, adj: {:?} }}",
-               self.mech,
-               String::from_utf8((*self.data).clone()).unwrap(),
-               self.counts,
-               self.adj)
-    }
-}
 
 impl Item {
-    fn new(mech: &'static str, adj: HashSet<usize>, data: Vec<u8>) -> Item {
+    fn new(mech: &'static str, adj: HashSet<usize>, data: String) -> Item {
         Item {
             mech: mech,
             data: Rc::new(data),
@@ -61,10 +52,10 @@ impl Context {
     pub fn add_item_count(&self, id: usize, count: u64) {
         self.net.item_count(self.current_epoch, id, count)
     }
-    pub fn get(&self) -> Vec<(usize, &'static str, Rc<Vec<u8>>)> {
+    pub fn get(&self) -> Vec<(usize, &'static str, Rc<String>)> {
         self.net.ids_to_contents(self.items.clone())
     }
-    pub fn explore(&self) -> Vec<(usize, &'static str, Rc<Vec<u8>>)> {
+    pub fn explore(&self) -> Vec<(usize, &'static str, Rc<String>)> {
         self.net.ids_to_contents(self.items.union(&self.frontier).cloned())
     }
     pub fn update(&self) -> Context {
@@ -73,10 +64,10 @@ impl Context {
     pub fn orient(&self, id: usize) {
         self.net.orient(self.initial_epoch, id)
     }
-    pub fn grow_for_mech(&self, mech: &'static str, data: Vec<u8>) -> usize {
+    pub fn grow_for_mech(&self, mech: &'static str, data: String) -> usize {
         self.net.grow(mech, data, self.initial_epoch)
     }
-    pub fn grow(&self, data: Vec<u8>) -> usize {
+    pub fn grow(&self, data: String) -> usize {
         self.grow_for_mech(self.mech, data)
     }
 }
@@ -104,7 +95,7 @@ impl Network {
     /// embryo is a collection of starting items to form an initial clique
     /// graph, of the form (mechName, data). Must be non-empty.
     pub fn new<U>(embryo: U) -> Network
-        where U: IntoIterator<Item = (&'static str, Vec<u8>)>
+        where U: IntoIterator<Item = (&'static str, String)>
     {
         let network = Network {
             net: Rc::new(RefCell::new(Net {
@@ -118,7 +109,7 @@ impl Network {
             let mut net = network.net.borrow_mut();
             // clique of embryo as base
             let mut id = 0;
-            let embryo: Vec<(&'static str, Vec<u8>)> = embryo.into_iter().collect();
+            let embryo: Vec<(&'static str, String)> = embryo.into_iter().collect();
             let edges: HashSet<usize> = (0..embryo.len()).collect();
             net.graph = embryo.into_iter()
                 .map(|(mech, data)| {
@@ -147,7 +138,7 @@ impl Network {
         }
         net.epochs[epoch].2.insert(id);
     }
-    fn ids_to_contents<U>(&self, items: U) -> Vec<(usize, &'static str, Rc<Vec<u8>>)>
+    fn ids_to_contents<U>(&self, items: U) -> Vec<(usize, &'static str, Rc<String>)>
         where U: IntoIterator<Item = usize>
     {
         let net = self.net.borrow();
@@ -200,7 +191,7 @@ impl Network {
         }
         net.epochs.push((id, ctx, HashSet::new()))
     }
-    fn grow(&self, mech: &'static str, data: Vec<u8>, epoch: usize) -> usize {
+    fn grow(&self, mech: &'static str, data: String, epoch: usize) -> usize {
         let id: usize;
         {
             let mut net = self.net.borrow_mut();
@@ -314,13 +305,13 @@ pub struct Skn<'a> {
 impl<'a> fmt::Debug for Skn<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let net = self.network.net.borrow();
-        write!(f, "{:?}", net)
+        write!(f, "Skn {{ net: {:?} }}", net)
     }
 }
 
 impl<'a> Skn<'a> {
     pub fn new<U>(embryo: U, iterations: u64) -> Skn<'a>
-        where U: IntoIterator<Item = (&'static str, Vec<u8>)>
+        where U: IntoIterator<Item = (&'static str, String)>
     {
         Skn {
             network: Network::new(embryo),

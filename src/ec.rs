@@ -54,8 +54,8 @@ fn ec_bin() -> String {
     }
 }
 
-pub fn embryo() -> Vec<(&'static str, Vec<u8>)> {
-    vec![("ec", EMBRYO.as_bytes().to_vec())]
+pub fn embryo() -> Vec<(&'static str, String)> {
+    vec![("ec", String::from(EMBRYO))]
 }
 fn primitives() -> HashSet<String> {
     PRIMS_ARR.iter().map(|&s| String::from(s)).collect()
@@ -118,7 +118,7 @@ mod course {
             let raw_items = ctx.get()
                 .into_iter()
                 .filter(|&(_, mech, _)| mech == "ec")
-                .map(|(_, _, rv)| String::from_utf8((*rv).clone()).unwrap());
+                .map(|(_, _, d)| d);
             for raw_item in raw_items {
                 let item: Vec<String> = serde_json::from_str(raw_item.as_str())
                     .expect("parse combinator from context");
@@ -196,12 +196,11 @@ fn run_ec(ctx: &Context, i: u64) -> Results {
     Results::from_string(raw_results)
 }
 
-fn exprs_in_context(ctx: Vec<(usize, &'static str, Rc<Vec<u8>>)>) -> HashMap<String, usize> {
+fn exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>) -> HashMap<String, usize> {
     ctx.into_iter()
         .filter(|&(_, mech, _)| mech == "ec")
-        .map(|(id, _, rv)| {
-            let raw = String::from_utf8((*rv).clone()).expect("read item in context");
-            let item: Vec<String> = serde_json::from_str(raw.as_str())
+        .map(|(id, _, d)| {
+            let item: Vec<String> = serde_json::from_str(d.as_str())
                 .expect("parse combinators from context");
             (id, item)
         })
@@ -209,7 +208,7 @@ fn exprs_in_context(ctx: Vec<(usize, &'static str, Rc<Vec<u8>>)>) -> HashMap<Str
         .collect()
 }
 
-fn find_exprs_in_context(ctx: Vec<(usize, &'static str, Rc<Vec<u8>>)>,
+fn find_exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
                          exprs: &Vec<&String>)
                          -> Vec<Option<usize>> {
     let exprs_in_ctx = exprs_in_context(ctx);
@@ -221,7 +220,7 @@ fn find_exprs_in_context(ctx: Vec<(usize, &'static str, Rc<Vec<u8>>)>,
         .collect()
 }
 
-fn find_expr_in_context(ctx: Vec<(usize, &'static str, Rc<Vec<u8>>)>,
+fn find_expr_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
                         expr: String)
                         -> Option<usize> {
     find_exprs_in_context(ctx, &vec![&expr])[0]
@@ -293,6 +292,6 @@ pub fn mech(ctx: Context, i: u64) {
         .map(|s| s.clone())
         .collect();
     if !new_combs.is_empty() {
-        ctx.grow(json!(new_combs).to_string().into_bytes());
+        ctx.grow(json!(new_combs).to_string());
     }
 }
