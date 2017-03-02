@@ -1,7 +1,7 @@
 extern crate rand;
 
 use std::cmp::{min, max};
-use std::collections::{BTreeMap, HashSet, HashMap};
+use std::collections::{HashSet, HashMap};
 use std::cell::RefCell;
 use std::fmt;
 use std::rc::Rc;
@@ -15,17 +15,19 @@ const NET_MAX_SIZE: usize = 128;
 struct Item {
     mech: &'static str,
     data: Rc<String>,
-    counts: BTreeMap<usize, u64>,
+    counts: HashMap<usize, u64>,
     adj: HashSet<usize>,
+    id: usize,
 }
 
 impl Item {
-    fn new(mech: &'static str, adj: HashSet<usize>, data: String) -> Item {
+    fn new(mech: &'static str, adj: HashSet<usize>, data: String, id: usize) -> Item {
         Item {
             mech: mech,
             data: Rc::new(data),
-            counts: BTreeMap::new(),
+            counts: HashMap::new(),
             adj: adj,
+            id: id,
         }
     }
     fn add_count(&mut self, epoch: usize, count: u64) {
@@ -115,7 +117,7 @@ impl Network {
                 .map(|(mech, data)| {
                     let mut edges = edges.clone();
                     edges.remove(&id);
-                    let item = Item::new(mech, edges, data);
+                    let item = Item::new(mech, edges, data, id);
                     id = id + 1;
                     item
                 })
@@ -252,7 +254,7 @@ impl Network {
                 item.adj.insert(id);
             }
 
-            let item = Item::new(mech, edges, data);
+            let item = Item::new(mech, edges, data, id);
             net.graph.push(item);
         }
         self.orient(epoch, id);
