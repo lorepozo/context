@@ -1,12 +1,23 @@
-{ "grammar": [],
+{ "grammar": [
+    {"expr": "((S (K nth)) I)"},
+    {"expr": "((S (K -1)) ((S (K len)) I))"},
+    {"expr": "((S ((S (K nth)) I)) ((S (K -1)) ((S (K len)) I)))}"}
+  ],
   "tasks": [
   { "problems": [
-    { "i":"IaN", "o":"Ian" },
-    { "i":"MELVIN", "o":"Melvin" },
-    { "i":"miKe", "o":"Mike" },
-    { "i":"StaNleY", "o":"Stanley" },
-    { "i":"mary", "o":"Mary" }
-  ], "name":"IaN -> Ian"},
+    { "i":"test", "o":"1" },
+    { "i":"tests", "o":"1" },
+    { "i":"test two", "o":"2" },
+    { "i":"yet another test", "o":"3" },
+    { "i":"yet another test", "o":"3" }
+  ], "name":"length"},
+  { "problems": [
+    { "i":"test", "o":"test" },
+    { "i":"tests", "o":"tests" },
+    { "i":"test two", "o":"two" },
+    { "i":"yet another test", "o":"test" },
+    { "i":"yet another test", "o":"test" }
+  ], "name":"last"},
   { "problems": [
     { "i":"test", "o":"Test" },
     { "i":"tests", "o":"Tests" },

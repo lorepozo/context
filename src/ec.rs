@@ -16,7 +16,7 @@ pub const ITER_MAX: u64 = 11;
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
 const EC_MAX_IN_ARTIFACT: usize = 20;
-static PRIMS_ARR: [&'static str; 26] = ["' '",
+static PRIMS_ARR: [&'static str; 27] = ["' '",
                                         "','",
                                         "'.'",
                                         "'<'",
@@ -39,6 +39,7 @@ static PRIMS_ARR: [&'static str; 26] = ["' '",
                                         "lower",
                                         "nth",
                                         "string-of-char",
+                                        "string-of-int",
                                         "substr",
                                         "uncap",
                                         "upper"];
