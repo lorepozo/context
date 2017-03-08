@@ -43,6 +43,7 @@ static PRIMS_ARR: [&'static str; 30] = ["B", "C", "S", "K", "I",
                                         "fnth",
                                         "feach"];
 
+/// course is for loading inputs for use with ec.
 mod course {
     extern crate serde_json;
     extern crate tempdir;
@@ -96,10 +97,12 @@ mod course {
         grammar: Vec<Comb>,
     }
     impl Course {
+        /// load the course file corresponding to a particular iteration.
         pub fn load(i: u64) -> Course {
             let s = read_curriculum(format!("course_{:02}.json", i));
             serde_json::from_str(s.as_str()).expect("parsing course file")
         }
+        /// merge a given Course with the grammar of combinators given in the Context.
         pub fn merge(&mut self, ctx: &Context) {
             let raw_items = ctx.get()
                 .into_iter()
@@ -114,6 +117,7 @@ mod course {
                 self.grammar.append(&mut grammar);
             }
         }
+        /// save a Course to a temporary file
         pub fn save(&self, i: u64) -> (TempDir, String) {
             let tmp_dir = TempDir::new("ec").expect("make temp dir");
             let path = tmp_dir.path().join(format!("ec_input_{}", i));
@@ -128,6 +132,7 @@ mod course {
 use self::course::{Course, read_curriculum};
 
 
+/// results is for parsing output from ec.
 mod results {
     extern crate serde_json;
 
@@ -175,16 +180,20 @@ fn ec_bin() -> String {
     }
 }
 
+/// embryo returns the embryo (embryo.json in the curriculum/ec directory)
+/// for use by the Skn that uses ec.
 pub fn embryo() -> Vec<(&'static str, String)> {
     let s = read_curriculum(String::from("embryo.json"));
     vec![("ec", s)]
 }
 
+/// primitives returns the set of expressions that are primitive to ec.
 fn primitives() -> HashSet<String> {
     PRIMS_ARR.iter().map(|&s| String::from(s)).collect()
 }
 
-
+/// run_ec is the lower-level function that produces the ec results for a
+/// given context and course iteration.
 fn run_ec(ctx: &Context, i: u64) -> Results {
     let mut c = Course::load(i);
     c.merge(ctx);
@@ -193,7 +202,7 @@ fn run_ec(ctx: &Context, i: u64) -> Results {
         .arg(path)
         .output()
         .expect("run ec");
-    drop(tmp_dir);
+    drop(tmp_dir); // we can delete the temporary directory after ec has run
     if !output.status.success() {
         let err = String::from_utf8(output.stderr).unwrap();
         panic!("ec failed in iteration {}: {}", i, err)
@@ -203,6 +212,9 @@ fn run_ec(ctx: &Context, i: u64) -> Results {
     Results::from_string(raw_results)
 }
 
+/// exprs_in_context takes a set of items in the context as given by
+/// Context::get() or Context::explore() and returns the combinators
+/// contained in those that are readable by ec.
 fn exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>) -> HashMap<String, usize> {
     ctx.into_iter()
         .filter(|&(_, mech, _)| mech == "ec")
@@ -215,6 +227,10 @@ fn exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>) -> HashMap<Stri
         .collect()
 }
 
+/// find_exprs_in_context takes a set of items in the context as given by
+/// Context::get() or Context::explore() and a vector of combinators.
+/// It returns a vector of the same size as exprs, with Some(id) if a match
+/// was found or None otherwise.
 fn find_exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
                          exprs: &Vec<&String>)
                          -> Vec<Option<usize>> {
@@ -227,12 +243,17 @@ fn find_exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
         .collect()
 }
 
+/// find_expr_in_context is like find_exprs_in_context but for a single
+/// combinator.
 fn find_expr_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
                         expr: String)
                         -> Option<usize> {
     find_exprs_in_context(ctx, &vec![&expr])[0]
 }
 
+/// mech is the ec mechanism as it should be registered/used by an Skn
+/// object. It wraps running ec with updating item access counts and adding
+/// a new item where appropriate.
 pub fn mech(ctx: Context, i: u64) {
     // run ec
     let results = run_ec(&ctx, i);
@@ -246,6 +267,7 @@ pub fn mech(ctx: Context, i: u64) {
              results.hit_rate,
              results.programs.len(),
              failures);
+
     // retrieve learned combs
     let mut learned: Vec<(String, f64)> = results.grammar
         .iter()
@@ -261,6 +283,7 @@ pub fn mech(ctx: Context, i: u64) {
                 (r.expr, r.log_probability)
             }));
     }
+
     // orient to most probable comb
     let mut ctx = ctx;
     let most_probable = learned.iter()
@@ -273,6 +296,7 @@ pub fn mech(ctx: Context, i: u64) {
         ctx.orient(id);
         ctx = ctx.update();
     }
+
     // make accesses ~ usage
     learned.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap()); // reversed sort
     let exprs = &learned.iter().map(|&(ref s, _)| s).collect();
@@ -294,7 +318,8 @@ pub fn mech(ctx: Context, i: u64) {
     for comb in &access_info {
         ctx.add_item_count(comb.2, comb.1 as u64);
     }
-    // get probable combs, exclude primitives and combs in context
+
+    // add item with probable combs, excluding primitives and combs in context
     let prims = primitives();
     let exprs_in_ctx = exprs_in_context(ctx.explore());
     let new_combs: Vec<String> = learned // already sorted by prob

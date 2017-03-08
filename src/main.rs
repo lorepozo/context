@@ -25,6 +25,8 @@ mod tests {
     use knowledge::{Context, Skn};
     use rand::distributions::{IndependentSample, Gamma};
 
+    /// a very basic mechanism, great for understanding what a mechanism
+    /// could look like.
     fn basic_mech(ctx: Context, i: u64) {
         let items = ctx.get();
         let front = ctx.explore();
@@ -49,10 +51,10 @@ mod tests {
     #[test]
     fn it_works() {
         let t = 20;
-        let embryo = vec![("test", String::from("data"))];
+        let embryo = vec![("basic_mech_name", String::from("some data"))];
         let mech = basic_mech;
         let mut skn = Skn::new(embryo, t);
-        skn.register("test", &mech);
+        skn.register("basic_mech_name", &mech);
         skn.run();
     }
 }
