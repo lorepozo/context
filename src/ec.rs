@@ -16,34 +16,32 @@ pub const ITER_MAX: u64 = 11;
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
 const EC_MAX_IN_ARTIFACT: usize = 20;
-static PRIMS_ARR: [&'static str; 27] = ["' '",
-                                        "','",
-                                        "'.'",
-                                        "'<'",
-                                        "'>'",
-                                        "'@'",
+static PRIMS_ARR: [&'static str; 30] = ["B", "C", "S", "K", "I",
+                                        "empty",
+                                        "upper",
+                                        "lower",
+                                        "cap",
                                         "+",
+                                        "0",
                                         "+1",
                                         "-1",
-                                        "0",
-                                        "B",
-                                        "C",
-                                        "I",
-                                        "K",
-                                        "S",
-                                        "cap",
-                                        "feach",
-                                        "findchar",
-                                        "fnth",
-                                        "len",
-                                        "lower",
-                                        "nth",
-                                        "string-of-char",
+                                        "wc",
+                                        "cc",
                                         "string-of-int",
+                                        "findchar",
+                                        "<SPACE>",
+                                        "<COMMA>",
+                                        "<DOT>",
+                                        "<AT>",
+                                        "<LESS-THAN>",
+                                        "<GREATER-THAN>",
+                                        "string-of-char",
                                         "substr",
-                                        "uncap",
-                                        "upper"];
-
+                                        "replace-index",
+                                        "replace-all",
+                                        "nth",
+                                        "fnth",
+                                        "feach"];
 
 mod course {
     extern crate serde_json;
@@ -201,6 +199,7 @@ fn run_ec(ctx: &Context, i: u64) -> Results {
         panic!("ec failed in iteration {}: {}", i, err)
     }
     let raw_results = String::from_utf8(output.stdout).expect("read ec output");
+    println!("{}", raw_results);
     Results::from_string(raw_results)
 }
 

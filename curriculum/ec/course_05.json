@@ -1,17 +1,24 @@
 { "grammar": [],
   "tasks": [
   { "problems": [
-    { "i":"IaN RoDny", "o":"Ian Rodny" },
-    { "i":"MELVIN Julian", "o":"Melvin Julian" },
-    { "i":"miKe dwIGHT", "o":"Mike Dwight" },
-    { "i":"StaNleY TRAVis", "o":"Stanley Travis" },
-    { "i":"mary gelman", "o":"Mary Gelman" }
-  ], "name":"IaN RoDny -> Ian Rodny"},
+    { "i":"ruby.clinton", "o":"ruby clinton" },
+    { "i":"josh.smith", "o":"josh smith" },
+    { "i":"matthew.rosman", "o":"matthew rosman" },
+    { "i":"brent.harold", "o":"brent harold" },
+    { "i":"jim.james", "o":"jim james" }
+  ], "name":"ruby.clinton -> ruby clinton"},
   { "problems": [
-    { "i":"5/5/1987", "o":"87" },
-    { "i":"1/21/2001", "o":"01" },
-    { "i":"21/1/2001", "o":"01" },
-    { "i":"22.02.2002", "o":"02" },
-    { "i":"2003-23-03", "o":"03" }
-  ], "name":"5/5/1987 -> 87"}
+    { "i":"ruby clinton", "o":"ruby.clinton" },
+    { "i":"josh smith", "o":"josh.smith" },
+    { "i":"matthew rosman", "o":"matthew.rosman" },
+    { "i":"brent harold", "o":"brent.harold" },
+    { "i":"jim james", "o":"jim.james" }
+  ], "name":"ruby clinton -> ruby.clinton"},
+  { "problems": [
+    { "i":"ruby clinton", "o":"rubyclinton" },
+    { "i":"josh smith", "o":"joshsmith" },
+    { "i":"matthew rosman", "o":"matthewrosman" },
+    { "i":"brent harold", "o":"brentharold" },
+    { "i":"jim james", "o":"jimjames" }
+  ], "name":"ruby clinton -> rubyclinton"}
 ]}

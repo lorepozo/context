@@ -1,8 +1,4 @@
-{ "grammar": [
-    {"expr": "((S (K nth)) I)"},
-    {"expr": "((S (K -1)) ((S (K len)) I))"},
-    {"expr": "((S ((S (K nth)) I)) ((S (K -1)) ((S (K len)) I)))}"}
-  ],
+{ "grammar": [],
   "tasks": [
   { "problems": [
     { "i":"test", "o":"1" },
@@ -16,13 +12,13 @@
     { "i":"tests", "o":"tests" },
     { "i":"test two", "o":"two" },
     { "i":"yet another test", "o":"test" },
-    { "i":"yet another test", "o":"test" }
+    { "i":"el em en o pi", "o":"pi" }
   ], "name":"last"},
   { "problems": [
     { "i":"test", "o":"Test" },
     { "i":"tests", "o":"Tests" },
     { "i":"test two", "o":"test Two" },
     { "i":"yet another test", "o":"yet another Test" },
-    { "i":"yet another test", "o":"yet another Test" }
+    { "i":"el em en o pi", "o":"el em en o Pi" }
   ], "name":"cap last"}
 ]}

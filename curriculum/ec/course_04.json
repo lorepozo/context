@@ -1,19 +1,16 @@
 { "grammar": [],
   "tasks": [
   { "problems": [
-    { "i":"ruby.clinton", "o":"ruby clinton" },
-    { "i":"josh.smith", "o":"josh smith" },
-    { "i":"matthew.rosman", "o":"matthew rosman" },
-    { "i":"brent.harold", "o":"brent harold" },
-    { "i":"jim.james", "o":"jim james" }
-  ], "name":"ruby.clinton -> ruby clinton"},
+    { "i":"IaN RoDny", "o":"Ian Rodny" },
+    { "i":"MELVIN Julian", "o":"Melvin Julian" },
+    { "i":"miKe dwIGHT", "o":"Mike Dwight" },
+    { "i":"StaNleY TRAVis", "o":"Stanley Travis" },
+    { "i":"mary gelman", "o":"Mary Gelman" }
+  ], "name":"IaN RoDny -> Ian Rodny"},
   { "problems": [
-    { "i":"ruby clinton", "o":"ruby.clinton" },
-    { "i":"josh smith", "o":"josh.smith" },
-    { "i":"matthew rosman", "o":"matthew.rosman" },
-    { "i":"brent harold", "o":"brent.harold" },
-    { "i":"jim james", "o":"jim.james" }
-  ], "name":"ruby clinton -> ruby.clinton"},
+    { "i":"where is.the dot", "o":"8" },
+    { "i":"an.other dot", "o":"2" }
+  ], "name":"where is.the dot -> 8"},
   { "problems": [
     { "i":"ruby", "o":"r" },
     { "i":"josh", "o":"j" },
