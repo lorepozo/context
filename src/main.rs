@@ -15,7 +15,8 @@ fn main() {
     let mut skn = knowledge::Skn::new(embryo, t);
     skn.register("ec", &mech);
     skn.run();
-    println!("{:?}", skn)
+    let mut w = ::std::io::stdout();
+    skn.dot(&mut w).unwrap();
 }
 
 #[cfg(test)]

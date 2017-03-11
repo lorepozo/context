@@ -1,5 +1,6 @@
 extern crate rand;
 
+use std::io::Write;
 use std::cmp::{min, max};
 use std::collections::{HashSet, HashMap};
 use std::cell::RefCell;
@@ -333,6 +334,37 @@ impl Network {
             current_epoch: epoch,
         }
     }
+    /// dot writes the network in the graphviz DOT language.
+    fn dot<W>(&self, w: &mut W) -> ::std::io::Result<()>
+        where W: Write
+    {
+        let net = self.net.borrow();
+        let mut body = String::new();
+        for id in 0..net.graph.len() {
+            body.push_str(format!("  N{} [shape=box,label={:?}];\n",
+                                  id,
+                                  &net.graph[id].data.as_str().clone())
+                .as_str());
+        }
+        body.pop();
+        let mut edges = net.graph
+            .iter()
+            .flat_map(|item| {
+                let id = item.id;
+                item.adj.iter().map(move |&o| {
+                    let mut v = vec![id, o];
+                    v.sort();
+                    (v[0], v[1])
+                })
+            })
+            .collect::<Vec<_>>();
+        edges.sort();
+        edges.dedup();
+        for (i, o) in edges {
+            body.push_str(format!("\n  N{} -- N{};", i, o).as_str());
+        }
+        write!(w, "graph G {{\n{}\n}}\n", body)
+    }
 }
 
 /// MechanismRegistry maintains a set of mechanisms used by the knowledge
@@ -393,5 +425,11 @@ impl<'a> Skn<'a> {
                 mech(ctx, t)
             }
         }
+    }
+    /// dot writes the network in the graphviz DOT language.
+    pub fn dot<W>(&self, w: &mut W) -> ::std::io::Result<()>
+        where W: Write
+    {
+        self.network.dot(w)
     }
 }
