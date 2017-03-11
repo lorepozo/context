@@ -12,11 +12,18 @@ use std::process::Command;
 
 use knowledge::Context;
 
+// masks used at compile-time to determine what gets logged
+const LOG_LEVEL: u8 = 5;
+
 pub const ITER_MAX: u64 = 11;
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
 const EC_MAX_IN_ARTIFACT: usize = 20;
-static PRIMS_ARR: [&'static str; 30] = ["B", "C", "S", "K", "I",
+static PRIMS_ARR: [&'static str; 31] = ["B",
+                                        "C",
+                                        "S",
+                                        "K",
+                                        "I",
                                         "empty",
                                         "upper",
                                         "lower",
@@ -37,8 +44,9 @@ static PRIMS_ARR: [&'static str; 30] = ["B", "C", "S", "K", "I",
                                         "<GREATER-THAN>",
                                         "string-of-char",
                                         "substr",
-                                        "replace-index",
-                                        "replace-all",
+                                        "replace",
+                                        "replace-substr-first",
+                                        "replace-substr-all",
                                         "nth",
                                         "fnth",
                                         "feach"];
@@ -208,7 +216,9 @@ fn run_ec(ctx: &Context, i: u64) -> Results {
         panic!("ec failed in iteration {}: {}", i, err)
     }
     let raw_results = String::from_utf8(output.stdout).expect("read ec output");
-    println!("{}", raw_results);
+    if LOG_LEVEL & 4 != 0 {
+        println!("{}", raw_results);
+    }
     Results::from_string(raw_results)
 }
 
@@ -262,26 +272,39 @@ pub fn mech(ctx: Context, i: u64) {
         .filter(|p| p.result.is_none())
         .map(|p| &p.task)
         .collect();
-    println!("ec at iteration {} got hit-rate {}/{}. failed: {:?}",
-             i,
-             results.hit_rate,
-             results.programs.len(),
-             failures);
+    if LOG_LEVEL & 1 != 0 {
+        println!("ec at iteration {} with got hit-rate {}/{}. failed: {:?}",
+                 i,
+                 results.hit_rate,
+                 results.programs.len(),
+                 failures);
+    }
+    if LOG_LEVEL & 2 != 0 {
+        println!("   using ctx {:?}", exprs_in_context(ctx.get()));
+    }
 
     // retrieve learned combs
+    let prims = primitives();
     let mut learned: Vec<(String, f64)> = results.grammar
         .iter()
         .map(|c| (c.expr.clone(), c.log_likelihood))
+        .filter(|c| !prims.contains(&c.0) && c.1.is_finite())
         .collect();
     if EC_GRAMMAR_INCLUDE_PROGS {
         learned.extend(results.programs
             .iter()
             .filter(|t| t.result.is_some())
             .map(|t| {
-                let r = &t.result;
+                let ref r = t.result;
                 let r = r.clone().unwrap();
                 (r.expr, r.log_probability)
-            }));
+            })
+            .filter(|c| !prims.contains(&c.0) && c.1.is_finite()));
+    }
+
+    // early return if no useful results
+    if learned.is_empty() {
+        return;
     }
 
     // orient to most probable comb
@@ -293,6 +316,9 @@ pub fn mech(ctx: Context, i: u64) {
         .clone();
     let result = find_expr_in_context(ctx.explore(), most_probable);
     if let Some(id) = result {
+        if LOG_LEVEL & 2 != 0 {
+            println!("   ctx.orient({})", id);
+        }
         ctx.orient(id);
         ctx = ctx.update();
     }
@@ -320,7 +346,6 @@ pub fn mech(ctx: Context, i: u64) {
     }
 
     // add item with probable combs, excluding primitives and combs in context
-    let prims = primitives();
     let exprs_in_ctx = exprs_in_context(ctx.explore());
     let new_combs: Vec<String> = learned // already sorted by prob
         .iter()
@@ -331,6 +356,8 @@ pub fn mech(ctx: Context, i: u64) {
         .collect();
     if !new_combs.is_empty() {
         ctx.grow(json!(new_combs).to_string());
-        println!("   ctx.grow({:?})", new_combs)
+        if LOG_LEVEL & 2 != 0 {
+            println!("   ctx.grow({:?})", new_combs);
+        }
     }
 }

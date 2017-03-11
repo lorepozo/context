@@ -128,7 +128,8 @@ impl Network {
                 epochs: Vec::new(),
             })),
         };
-        { // scope in for this mutable borrow
+        {
+            // scope in for this mutable borrow
             let mut net = network.net.borrow_mut();
             // clique of embryo as base
             let mut id = 0;
@@ -159,7 +160,7 @@ impl Network {
     fn item_count(&self, epoch: usize, id: usize, count: u64) {
         let mut net = self.net.borrow_mut();
         {
-            let mut item = &mut net.graph[id];
+            let ref mut item = net.graph[id];
             item.add_count(epoch, count);
         }
         net.epochs[epoch].2.insert(id);
@@ -172,7 +173,7 @@ impl Network {
         let net = self.net.borrow();
         items.into_iter()
             .map(move |id| {
-                let item = &net.graph[id];
+                let ref item = net.graph[id];
                 (id, item.mech, item.data.clone())
             })
             .collect()
@@ -182,7 +183,7 @@ impl Network {
     /// determine where to grow the context.
     fn orient(&self, epoch: usize, id: usize) {
         let mut net = self.net.borrow_mut();
-        let mut ctx = HashSet::new();
+        let mut ctx: HashSet<usize>;
         let n = net.graph.len();
         if n < net.context_min_size {
             // use the entire network
@@ -198,12 +199,13 @@ impl Network {
             let kmax = prop * (n as f64).powf(exp);
             let size = max(net.context_min_size, min(n, kmax as usize));
 
-            // start with the given node. add its neighbors, select most
-            // popular neighbor and repeat. stop when we get to `size` or
-            // when there are no new neighbors.
+            // start with the given node. add its neighbors in order by
+            // popularity, select most popular neighbor and repeat. stop
+            // when we get to `size`.
+            ctx = HashSet::new();
             let mut selected = id;
             while ctx.len() < size {
-                let ext: HashSet<usize> = net.graph[selected]
+                let mut ext: Vec<usize> = net.graph[selected]
                     .adj
                     .difference(&ctx)
                     .cloned()
@@ -211,9 +213,19 @@ impl Network {
                 if ext.is_empty() {
                     break;
                 }
+                if ext.len() + ctx.len() > size {
+                    // truncate less-used items
+                    let take = size - ctx.len();
+                    ext.sort_by_key(|&id| {
+                        let ref item = net.graph[id];
+                        -(item.recent_count(epoch) as i64) // reversed
+                    });
+                    ctx.extend(ext.iter().take(take));
+                    break;
+                }
                 selected = ext.iter()
                     .max_by_key(|&id| {
-                        let item = &net.graph[*id];
+                        let ref item = net.graph[*id];
                         item.recent_count(epoch)
                     })
                     .unwrap()
@@ -237,22 +249,17 @@ impl Network {
             let ids: HashSet<usize> = net.epochs
                 .iter()
                 .skip(epoch) // look for accesses as early as this epoch
-                .flat_map(|&(_, _, ref ids)| ids.clone())
+                .flat_map(|&(_, ref cx, ref ru)| cx.union(ru).cloned())
                 .collect(); // removes duplicates
             let mut sum = 0;
-            let mut counts: HashSet<(usize, u64)> = ids.iter()
+            let counts: HashSet<(usize, u64)> = ids.iter()
                 .map(|&id| {
-                    let item = &net.graph[id];
-                    let count = item.recent_count(epoch);
+                    let ref item = net.graph[id];
+                    let count = 1 + item.recent_count(epoch);
                     sum += count;
                     (id, count)
                 })
                 .collect();
-            if sum == 0 {
-                // uniform in context if no recent accesses
-                counts = ids.iter().map(|&id| (id, 1)).collect();
-                sum = counts.len() as u64
-            }
 
             // convert counts to probabilities
             let antecedents: HashMap<usize, f64> = counts.iter()
@@ -304,7 +311,7 @@ impl Network {
         let net = self.net.borrow();
         let frontier: HashSet<usize> = items.iter()
             .flat_map(|&id| {
-                let item = &net.graph[id];
+                let ref item = net.graph[id];
                 item.adj.clone()
             })
             .collect();
