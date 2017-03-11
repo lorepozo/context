@@ -2,21 +2,43 @@
 extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
+extern crate clap;
 extern crate rand;
 extern crate tempdir;
 
 pub mod knowledge;
 pub mod ec;
 
+use std::fs::File;
+use clap::{Arg, App};
+
+fn argparse() -> Option<String> {
+    let matches = App::new("skn with ec")
+        .arg(Arg::with_name("dot")
+            .long("dot")
+            .value_name("FILE")
+            .help("writes graphviz dot to file")
+            .takes_value(true))
+        .get_matches();
+    match matches.value_of("dot") {
+        Some(s) => Some(String::from(s)),
+        _ => None,
+    }
+}
+
 fn main() {
+    let dot = argparse();
+
     let t = ec::ITER_MAX;
     let embryo = ec::embryo();
     let mech = ec::mech;
     let mut skn = knowledge::Skn::new(embryo, t);
     skn.register("ec", &mech);
     skn.run();
-    let mut w = ::std::io::stdout();
-    skn.dot(&mut w).unwrap();
+    if let Some(path) = dot {
+        let mut f = File::create(path).expect("create dot file");
+        skn.dot(&mut f).unwrap();
+    }
 }
 
 #[cfg(test)]

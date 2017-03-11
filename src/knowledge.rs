@@ -341,10 +341,8 @@ impl Network {
         let net = self.net.borrow();
         let mut body = String::new();
         for id in 0..net.graph.len() {
-            body.push_str(format!("  N{} [shape=box,label={:?}];\n",
-                                  id,
-                                  &net.graph[id].data.as_str().clone())
-                .as_str());
+            let label = format!("id={}  {}", id, &net.graph[id].data.as_str().clone());
+            body.push_str(format!("  N{} [shape=box,label={:?}];\n", id, label).as_str());
         }
         body.pop();
         let mut edges = net.graph
