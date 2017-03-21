@@ -23,7 +23,7 @@ the project root:
 
 ```sh
 # start from this project's root directory.
-# clone, build, and copy jetty's ec:
+# clone, build, and copy ec:
 $ git clone git@github.com:lucasem/ec ec-repo
 $ cd ec-repo
 $ make && cp ec ../ec
@@ -33,5 +33,5 @@ $ cargo run
 ```
 
 For more customization, you can have the `$EC` environment variable point to
-the jetty's ec binary and the `$EC_CURRICULUM` environment variable point to
-a directory with similar structure to [`./curriculum/ec`](./curriculum/ec).
+the ec binary and the `$EC_CURRICULUM` environment variable point to a
+directory with similar structure to [`./curriculum/ec`](./curriculum/ec).
