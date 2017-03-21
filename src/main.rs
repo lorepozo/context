@@ -4,6 +4,7 @@ extern crate serde_json;
 extern crate serde_derive;
 extern crate clap;
 extern crate rand;
+extern crate regex;
 extern crate tempdir;
 
 pub mod knowledge;
@@ -29,7 +30,7 @@ fn argparse() -> Option<String> {
 fn main() {
     let dot = argparse();
 
-    let t = ec::ITER_MAX;
+    let t = ec::iter_max();
     let embryo = ec::embryo();
     let mech = ec::mech;
     let mut skn = knowledge::Skn::new(embryo, t);

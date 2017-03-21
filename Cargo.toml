@@ -6,6 +6,7 @@ authors = ["Lucas Morales <lucas@lucasem.com>"]
 [dependencies]
 clap = "2.20"
 rand = "0.3"
+regex = "0.2"
 serde = "0.9"
 serde_derive = "0.9"
 serde_json = "0.9"

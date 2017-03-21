@@ -19,7 +19,6 @@ use knowledge::Context;
 // 4 -> show raw ec output
 const LOG_LEVEL: u8 = 1;
 
-pub const ITER_MAX: u64 = 3;
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
 const EC_MAX_IN_ARTIFACT: usize = 20;
@@ -57,11 +56,13 @@ static PRIMS_ARR: [&'static str; 31] = ["B",
 
 /// course is for loading inputs for use with ec.
 mod course {
+    extern crate regex;
     extern crate serde_json;
     extern crate tempdir;
 
+    use regex::Regex;
     use std::env;
-    use std::fs::File;
+    use std::fs::{self, File};
     use std::io::{Read, Write};
     use std::path::Path;
     use tempdir::TempDir;
@@ -79,11 +80,29 @@ mod course {
     }
 
     pub fn read_curriculum(name: String) -> String {
-        let path = Path::new(curriculum_path().as_str()).join(name);
+        let curr_path = curriculum_path();
+        let path = Path::new(&curr_path).join(name);
         let mut f = File::open(&path).expect("opening curriculum file");
         let mut s = String::new();
         f.read_to_string(&mut s).expect("reading curriculum file");
         s
+    }
+
+    pub fn iter_max() -> u64 {
+        let re = Regex::new(r"^course_..\.json$").unwrap();
+        let curr_path = curriculum_path();
+        fs::read_dir(Path::new(&curr_path))
+            .expect("read curriculum dir")
+            .map(|entry| entry.expect("read curriculum dir"))
+            .filter(|dir| {
+                let path = dir.path();
+                let rel_path = path.strip_prefix(&curr_path).unwrap();
+                match rel_path.to_str() {
+                    Some(filename) => re.is_match(filename),
+                    _ => false,
+                }
+            })
+            .count() as u64
     }
 
     #[derive(Serialize, Deserialize)]
@@ -112,7 +131,7 @@ mod course {
         /// load the course file corresponding to a particular iteration.
         pub fn load(i: u64) -> Course {
             let s = read_curriculum(format!("course_{:02}.json", i));
-            serde_json::from_str(s.as_str()).expect("parsing course file")
+            serde_json::from_str(&s).expect("parsing course file")
         }
         /// merge a given Course with the grammar of combinators given in the Context.
         pub fn merge(&mut self, ctx: &Context) {
@@ -121,7 +140,7 @@ mod course {
                 .filter(|&(_, mech, _)| mech == "ec")
                 .map(|(_, _, d)| d);
             for raw_item in raw_items {
-                let item: Vec<String> = serde_json::from_str(raw_item.as_str())
+                let item: Vec<String> = serde_json::from_str(&raw_item)
                     .expect("parse combinator from context");
                 let mut grammar: Vec<Comb> = item.into_iter()
                     .map(|s| Comb { expr: s })
@@ -142,6 +161,7 @@ mod course {
     }
 }
 use self::course::{Course, read_curriculum};
+pub use self::course::iter_max;
 
 
 /// results is for parsing output from ec.
@@ -175,7 +195,7 @@ mod results {
     }
     impl Results {
         pub fn from_string(raw: String) -> Results {
-            serde_json::from_str(raw.as_str()).expect(format!("parse ec output {}", raw).as_str())
+            serde_json::from_str(&raw).expect("parse ec output")
         }
     }
 }
@@ -233,7 +253,7 @@ fn exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>) -> HashMap<Stri
     ctx.into_iter()
         .filter(|&(_, mech, _)| mech == "ec")
         .map(|(id, _, d)| {
-            let item: Vec<String> = serde_json::from_str(d.as_str())
+            let item: Vec<String> = serde_json::from_str(&d)
                 .expect("parse combinators from context");
             (id, item)
         })
