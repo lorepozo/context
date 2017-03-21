@@ -1,17 +1,57 @@
-{ "grammar": [],
+{ "grammar": [
+  {"expr": "(B ((C substr) (-1 0)))"}
+],
   "tasks": [
   { "problems": [
-    { "i":"IaN", "o":"Ian" },
-    { "i":"MELVIN", "o":"Melvin" },
-    { "i":"miKe", "o":"Mike" },
-    { "i":"StaNleY", "o":"Stanley" },
-    { "i":"mary", "o":"Mary" }
-  ], "name":"IaN -> Ian"},
+    { "i":"ruby", "o":"r" },
+    { "i":"josh and stuff", "o":"j" }
+  ], "name":"ruby -> r"},
   { "problems": [
-    { "i":"My name is Richard", "o":"Richard" },
-    { "i":"My name is John", "o":"John" },
-    { "i":"My name is Josh", "o":"Josh" },
-    { "i":"My name is Bill", "o":"Bill" },
-    { "i":"My name is Albert", "o":"Albert" }
-  ], "name":"My name is Richard -> Richard"}
+    { "i":"where is.the dot", "o":"8" },
+    { "i":"an.other dot", "o":"2" }
+  ], "name":"find dot"},
+  { "problems": [
+    { "i":"where is<the angle", "o":"8" },
+    { "i":"an<other angle", "o":"2" }
+  ], "name":"find less-than"},
+  { "problems": [
+    { "i":"discard.after dot", "o":"discard" },
+    { "i":"os.h", "o":"os" },
+    { "i":"string.h", "o":"string" }
+  ], "name":"discard after dot"},
+  { "problems": [
+    { "i":"drop first two chars", "o":"op first two chars" },
+    { "i":"tail", "o":"il" }
+  ], "name":"drop first two chars"},
+  { "problems": [
+    { "i":"before angle<discard", "o":"discard" },
+    { "i":"one<two three four", "o":"two three four" },
+    { "i":"one two three <four", "o":"four" }
+  ], "name":"discard before less-than"},
+  { "problems": [
+    { "i":"discard>after angle", "o":"discard" },
+    { "i":"one>two three four", "o":"one" },
+    { "i":"one two> three four", "o":"one two" }
+  ], "name":"discard after greater-than"},
+  { "problems": [
+    { "i":"#include <os.h>", "o":"os.h" },
+    { "i":"#include <malloc.h>", "o":"malloc.h" },
+    { "i":"#include<stdlib.h>", "o":"stdlib.h" },
+    { "i":"#include<sys.h>", "o":"sys.h" },
+    { "i":"#include<stdio.h>", "o":"stdio.h" }
+  ], "name":"#include<os.h> -> os.h"},
+  { "problems": [
+    { "i":"#include <os.h>", "o":"os" },
+    { "i":"#include <malloc.h>", "o":"malloc" },
+    { "i":"#include<stdlib.h>", "o":"stdlib" },
+    { "i":"#include<sys.h>", "o":"sys" },
+    { "i":"#include<stdio.h>", "o":"stdio" }
+  ], "name":"#include<os.h> -> os"},
+  { "problems": [
+    { "i":"#include <os.h>", "o":"OS" },
+    { "i":"#include <malloc.h>", "o":"MALLOC" },
+    { "i":"#include<stdlib.h>", "o":"STDLIB" },
+    { "i":"#include<sys.h>", "o":"SYS" },
+    { "i":"#include<stdio.h>", "o":"STDIO" }
+  ], "name":"#include<os.h> -> OS"}
 ]}

@@ -13,9 +13,13 @@ use std::process::Command;
 use knowledge::Context;
 
 // masks used at compile-time to determine what gets logged
-const LOG_LEVEL: u8 = 5;
+// 1 -> show iteration hit-rate and failures
+// 2 -> show context before each iteration,
+//      and show each .orient() and .grow() call
+// 4 -> show raw ec output
+const LOG_LEVEL: u8 = 1;
 
-pub const ITER_MAX: u64 = 11;
+pub const ITER_MAX: u64 = 3;
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
 const EC_MAX_IN_ARTIFACT: usize = 20;

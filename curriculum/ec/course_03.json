@@ -1,24 +1,37 @@
 { "grammar": [],
   "tasks": [
   { "problems": [
-    { "i":"test", "o":"1" },
-    { "i":"tests", "o":"1" },
-    { "i":"test two", "o":"2" },
-    { "i":"yet another test", "o":"3" },
-    { "i":"yet another test", "o":"3" }
-  ], "name":"length"},
+    { "i":"ruby", "o":"r" },
+    { "i":"josh and stuff", "o":"j" }
+  ], "name":"ruby -> r"},
   { "problems": [
-    { "i":"test", "o":"test" },
-    { "i":"tests", "o":"tests" },
-    { "i":"test two", "o":"two" },
-    { "i":"yet another test", "o":"test" },
-    { "i":"el em en o pi", "o":"pi" }
-  ], "name":"last"},
+    { "i":"where is.the dot", "o":"8" }
+  ], "name":"find dot"},
   { "problems": [
-    { "i":"test", "o":"Test" },
-    { "i":"tests", "o":"Tests" },
-    { "i":"test two", "o":"test Two" },
-    { "i":"yet another test", "o":"yet another Test" },
-    { "i":"el em en o pi", "o":"el em en o Pi" }
-  ], "name":"cap last"}
+    { "i":"discard@after at", "o":"discard" }
+  ], "name":"discard after @"},
+  { "problems": [
+    { "i":"discard.after dot", "o":"discard" }
+  ], "name":"discard after dot"},
+  { "problems": [
+    { "i":"ruby.clinton", "o":"ruby clinton" },
+    { "i":"matthew.jack.rosman", "o":"matthew jack rosman" }
+  ], "name":"dots to spaces"},
+  { "problems": [
+    { "i":"no spaces", "o":"nospaces" },
+    { "i":"no matter how many", "o":"nomatterhowmany" }
+  ], "name":"nospaces"},
+  { "problems": [
+    { "i":"ruby clinton", "o":"Ruby Clinton" },
+    { "i":"matthew jack rosman", "o":"Matthew Jack Rosman" }
+  ], "name":"feach cap"},
+  { "problems": [
+    { "i":"ruby.clinton", "o":"Ruby Clinton" },
+    { "i":"matthew.jack.rosman", "o":"Matthew Jack Rosman" }
+  ], "name":"ruby.clinton -> Ruby Clinton"},
+  { "problems": [
+    { "i":"ruby.clinton@mit.edu", "o":"Ruby Clinton" },
+    { "i":"josh.smith@gmail.com", "o":"Josh Smith" },
+    { "i":"matthew.jack.rosman@yahoo.com", "o":"Matthew Jack Rosman" }
+  ], "name":"ruby.clinton@mit.edu -> Ruby Clinton"}
 ]}

@@ -1,16 +1,22 @@
 { "grammar": [],
   "tasks": [
   { "problems": [
-    { "i":"test", "o":"TEST" },
-    { "i":"tests", "o":"TESTS" },
-    { "i":"test two", "o":"TEST two" },
-    { "i":"yet another test", "o":"YET another test" }
-  ], "name":"upper first"},
+    { "i":"ruby", "o":"r" }
+  ], "name":"ruby -> r"},
   { "problems": [
-    { "i":"thomas", "o":"Thomas" },
-    { "i":"james", "o":"James" },
-    { "i":"chris", "o":"Chris" },
-    { "i":"charles", "o":"Charles" },
-    { "i":"paul", "o":"Paul" }
-  ], "name":"thomas -> Thomas"}
+    { "i":"no spaces", "o":"nospaces" },
+    { "i":"no matter how many", "o":"nomatterhowmany" }
+  ], "name":"nospaces"},
+  { "problems": [
+    { "i":"Marin Lorentzen", "o":"M L" }
+  ], "name":"first letters"},
+  { "problems": [
+    { "i":"Marin Lorentzen", "o":"ML" }
+  ], "name":"concat first letters"},
+  { "problems": [
+    { "i":"Words that start With Caps", "o":"Words With Caps" }
+  ], "name":"filter cap"},
+  { "problems": [
+    { "i":"Structure and Interpretation of Computer Programs", "o":"SICP" }
+  ], "name":"SICP"}
 ]}
