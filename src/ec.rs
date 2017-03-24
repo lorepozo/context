@@ -16,7 +16,8 @@ use knowledge::Context;
 // 1 -> show iteration hit-rate and failures
 // 2 -> show context before each iteration,
 //      and show each .orient() and .grow() call
-// 4 -> show raw ec output
+// 4 -> show ec output
+// 8 -> show ec input
 const LOG_LEVEL: u8 = 1;
 
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
@@ -229,6 +230,9 @@ fn primitives() -> HashSet<String> {
 fn run_ec(ctx: &Context, i: u64) -> Results {
     let mut c = Course::load(i);
     c.merge(ctx);
+    if LOG_LEVEL & 8 != 0 {
+        println!("EC INPUT:\n{}", serde_json::to_string_pretty(&c).unwrap())
+    }
     let (tmp_dir, path) = c.save(i);
     let output = Command::new(ec_bin())
         .arg(path)
@@ -241,7 +245,14 @@ fn run_ec(ctx: &Context, i: u64) -> Results {
     }
     let raw_results = String::from_utf8(output.stdout).expect("read ec output");
     if LOG_LEVEL & 4 != 0 {
-        println!("{}", raw_results);
+        let err = match output.stderr.is_empty() {
+            true => String::from(""),
+            false => {
+                let raw_err = String::from_utf8(output.stderr).expect("read ec err");
+                format!("EC ERROR:\n{}\n", raw_err)
+            }
+        };
+        println!("{}EC OUTPUT:\n{}", err, raw_results)
     }
     Results::from_string(raw_results)
 }
