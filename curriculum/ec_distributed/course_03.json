@@ -1,0 +1,35 @@
+{ "grammar": [
+    { "expr": "(B ((C substr) (-1 0)))"},
+    { "expr":"((B +1) (findchar <LESS-THAN>))" } ],
+  "tasks": [
+    { "name":"ruby -> r",
+      "train": [
+        { "i":"ruby", "o":"r" },
+        { "i":"josh and stuff", "o":"j" } ],
+      "test": [
+        { "i":"just.the.first.letter", "o":"j" } ] },
+    { "name":"find dot",
+      "train": [
+        { "i":"where is.the dot", "o":"8" } ],
+      "test": [
+        { "i":"an.other dot", "o":"2" } ] },
+    { "name":"find less-than",
+      "train": [
+        { "i":"where is<the angle", "o":"8" } ],
+      "test": [
+        { "i":"an<other angle", "o":"2" } ] },
+    { "name":"discard after dot",
+      "train": [
+        { "i":"discard after.dot", "o":"discard after" },
+        { "i":"os.h", "o":"os" } ],
+      "test": [
+        { "i":"string.h", "o":"string" },
+        { "i":"many words.before dot", "o":"many words" } ] },
+    { "name":"discard after greater-than",
+      "train": [
+        { "i":"discard>after angle", "o":"discard" },
+        { "i":"one two> three four", "o":"one two" } ],
+      "test": [
+        { "i":"one two three>four", "o":"one two three" },
+        { "i":"one>two three four", "o":"one" } ] }
+]}

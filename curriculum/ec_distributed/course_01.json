@@ -1,0 +1,18 @@
+{ "grammar": [],
+  "tasks": [
+    { "name":"nospaces",
+      "train": [
+        { "i":"no spaces", "o":"nospaces" },
+        { "i":"no matter how many", "o":"nomatterhowmany" } ],
+      "test": [
+        { "i":"without", "o":"without"},
+        { "i":"some spaces", "o":"somespaces" } ] },
+    { "name":"first letters",
+      "train": [
+        { "i":"Marin Lorentzen", "o":"M L" } ],
+      "test": [
+        { "i":"Annita Nicely", "o":"A N" },
+        { "i":"Joanie Faas", "o":"J F" },
+        { "i":"Oma Cornelison", "o":"O C" },
+        { "i":"Verlene Ottley", "o":"V O" } ] }
+]}

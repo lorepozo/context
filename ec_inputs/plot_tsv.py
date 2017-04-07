@@ -42,7 +42,7 @@ tables = list(map(make_table, sys.argv[1:]))
 T = len(tables)
 
 bar_width = 0.7/T
-plt.figure(figsize=(6,8))
+plt.figure(figsize=(4,5))
 if T % 2 == 1:
     offsets = list(range(-(T//2), 1+T//2))[::-1]
 else:

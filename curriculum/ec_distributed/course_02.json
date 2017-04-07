@@ -1,0 +1,25 @@
+{ "grammar": [],
+  "tasks": [
+    { "name":"filter cap",
+      "train": [
+        { "i":"Words that start With Caps", "o":"Words With Caps" } ],
+      "test": [
+        { "i":"thIs One IS mORE meSsY", "o":"One IS" } ] },
+    { "name":"concat first letters",
+      "train": [
+        { "i":"Marin Lorentzen", "o":"ML" } ],
+      "test": [
+        { "i":"Annita Nicely", "o":"AN" },
+        { "i":"Joanie Faas", "o":"JF" },
+        { "i":"Oma Cornelison", "o":"OC" },
+        { "i":"Verlene Ottley", "o":"VO" } ] },
+    { "name":"SICP",
+      "train": [
+        { "i":"Structure and Interpretation of Computer Programs", "o":"SICP" } ],
+      "test": [
+        { "i":"Principals Of Programming Languages", "o":"POPL" },
+        { "i":"Neural Information Processing Systems", "o":"NIPS" },
+        { "i":"International Conferences on Software Engineering", "o":"ICSE" },
+        { "i":"International Conference on Functional Programming", "o":"ICFP" },
+        { "i":"International Business Machines", "o":"IBM" } ] }
+]}

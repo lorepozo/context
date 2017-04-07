@@ -1,0 +1,19 @@
+{ "grammar": [],
+  "tasks": [
+  { "name":"ruby -> r",
+    "train": [
+      { "i":"ruby", "o":"r" },
+      { "i":"josh and stuff", "o":"j" } ],
+    "test": [
+      { "i":"always the first letter", "o":"a" } ] },
+  { "name":"find dot",
+    "train": [
+      { "i":"where is.the dot", "o":"8" } ],
+    "test": [
+      { "i":"an.other dot", "o":"2" } ] },
+  { "name":"discard after dot",
+    "train": [
+      { "i":"discard.after dot", "o":"discard" } ],
+    "test": [
+      { "i":"one two.three four", "o":"one two" } ] }
+]}

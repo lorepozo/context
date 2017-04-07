@@ -25,11 +25,12 @@ const STORE_INPUTS: bool = false;
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
 const EC_MAX_IN_ARTIFACT: usize = 20;
-static PRIMS_ARR: [&'static str; 31] = ["B",
+static PRIMS_ARR: [&'static str; 32] = ["B",
                                         "C",
                                         "S",
                                         "K",
                                         "I",
+                                        "is",
                                         "empty",
                                         "upper",
                                         "lower",
