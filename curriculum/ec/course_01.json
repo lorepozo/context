@@ -1,22 +1,40 @@
 { "grammar": [],
   "tasks": [
-  { "problems": [
-    { "i":"ruby", "o":"r" }
-  ], "name":"ruby -> r"},
-  { "problems": [
-    { "i":"no spaces", "o":"nospaces" },
-    { "i":"no matter how many", "o":"nomatterhowmany" }
-  ], "name":"nospaces"},
-  { "problems": [
-    { "i":"Marin Lorentzen", "o":"M L" }
-  ], "name":"first letters"},
-  { "problems": [
-    { "i":"Marin Lorentzen", "o":"ML" }
-  ], "name":"concat first letters"},
-  { "problems": [
-    { "i":"Words that start With Caps", "o":"Words With Caps" }
-  ], "name":"filter cap"},
-  { "problems": [
-    { "i":"Structure and Interpretation of Computer Programs", "o":"SICP" }
-  ], "name":"SICP"}
+    { "name":"nospaces",
+      "train": [
+        { "i":"no spaces", "o":"nospaces" },
+        { "i":"no matter how many", "o":"nomatterhowmany" } ],
+      "test": [
+        { "i":"without", "o":"without"},
+        { "i":"some spaces", "o":"somespaces" } ] },
+    { "name":"first letters",
+      "train": [
+        { "i":"Marin Lorentzen", "o":"M L" } ],
+      "test": [
+        { "i":"Annita Nicely", "o":"A N" },
+        { "i":"Joanie Faas", "o":"J F" },
+        { "i":"Oma Cornelison", "o":"O C" },
+        { "i":"Verlene Ottley", "o":"V O" } ] },
+    { "name":"concat first letters",
+      "train": [
+        { "i":"Marin Lorentzen", "o":"ML" } ],
+      "test": [
+        { "i":"Annita Nicely", "o":"AN" },
+        { "i":"Joanie Faas", "o":"JF" },
+        { "i":"Oma Cornelison", "o":"OC" },
+        { "i":"Verlene Ottley", "o":"VO" } ] },
+    { "name":"filter cap",
+      "train": [
+        { "i":"Words that start With Caps", "o":"Words With Caps" } ],
+      "test": [
+        { "i":"thIs One IS mORE meSsY", "o":"One IS" } ] },
+    { "name":"SICP",
+      "train": [
+        { "i":"Structure and Interpretation of Computer Programs", "o":"SICP" } ],
+      "test": [
+        { "i":"Principals Of Programming Languages", "o":"POPL" },
+        { "i":"Neural Information Processing Systems", "o":"NIPS" },
+        { "i":"International Conferences on Software Engineering", "o":"ICSE" },
+        { "i":"International Conference on Functional Programming", "o":"ICFP" },
+        { "i":"International Business Machines", "o":"IBM" } ] }
 ]}

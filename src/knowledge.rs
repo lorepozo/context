@@ -9,7 +9,7 @@ use std::rc::Rc;
 
 use rand::distributions::{IndependentSample, Range};
 
-const CTX_MIN_SIZE: usize = 5;
+const CTX_MIN_SIZE: usize = 3;
 const NET_MAX_SIZE: usize = 128;
 
 /// Item maintains the data and metadata for a single knowledge artifact.

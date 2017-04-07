@@ -20,6 +20,8 @@ use knowledge::Context;
 // 8 -> show ec input
 const LOG_LEVEL: u8 = 1;
 
+const STORE_INPUTS: bool = false;
+
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
 const EC_MAX_IN_ARTIFACT: usize = 20;
@@ -114,8 +116,9 @@ mod course {
 
     #[derive(Serialize, Deserialize)]
     struct Task {
-        problems: Vec<Problem>,
         name: String,
+        train: Vec<Problem>,
+        test: Vec<Problem>,
     }
 
     #[derive(Serialize, Deserialize)]
@@ -152,12 +155,21 @@ mod course {
         /// save a Course to a temporary file
         pub fn save(&self, i: u64) -> (TempDir, String) {
             let tmp_dir = TempDir::new("ec").expect("make temp dir");
-            let path = tmp_dir.path().join(format!("ec_input_{}", i));
+            let path = tmp_dir.path().join(format!("ec_input_{}.json", i));
             let mut f = File::create(&path).expect("create temp file");
             let ser = serde_json::to_string(self).expect("serialize ec input");
             write!(f, "{}", ser).expect("write ec input");
             let path = String::from(path.to_str().unwrap());
             (tmp_dir, path)
+        }
+        /// save a Course to a permanent file
+        pub fn save_perm(&self, i: u64) -> String {
+            let path = Path::new("./ec_inputs").join(format!("ec_input_{}.json", i));
+            let mut f = File::create(&path).expect("create ec_input file");
+            let ser = serde_json::to_string(self).expect("serialize ec input");
+            write!(f, "{}", ser).expect("write ec input");
+            let path = String::from(path.to_str().unwrap());
+            path
         }
     }
 }
@@ -179,6 +191,7 @@ mod results {
     pub struct TaskResult {
         pub expr: String,
         pub log_probability: f64,
+        pub time: f64,
     }
 
     #[derive(Serialize, Deserialize)]
@@ -233,15 +246,24 @@ fn run_ec(ctx: &Context, i: u64) -> Results {
     if LOG_LEVEL & 8 != 0 {
         println!("EC INPUT:\n{}", serde_json::to_string_pretty(&c).unwrap())
     }
-    let (tmp_dir, path) = c.save(i);
-    let output = Command::new(ec_bin())
-        .arg(path)
-        .output()
-        .expect("run ec");
-    drop(tmp_dir); // we can delete the temporary directory after ec has run
+    let output;
+    if STORE_INPUTS {
+        let path = c.save_perm(i);
+        output = Command::new(ec_bin())
+            .arg(path)
+            .output()
+            .expect("run ec");
+    } else {
+        let (tmp_dir, path) = c.save(i);
+        output = Command::new(ec_bin())
+            .arg(path)
+            .output()
+            .expect("run ec");
+        drop(tmp_dir); // we can delete the temporary directory after ec has run
+    }
     if !output.status.success() {
         let err = String::from_utf8(output.stderr).unwrap();
-        panic!("ec failed in iteration {}: {}", i, err)
+        panic!("ec failed in phase {}: {}", i, err)
     }
     let raw_results = String::from_utf8(output.stdout).expect("read ec output");
     if LOG_LEVEL & 4 != 0 {
@@ -308,7 +330,7 @@ pub fn mech(ctx: Context, i: u64) {
         .map(|p| &p.task)
         .collect();
     if LOG_LEVEL & 1 != 0 {
-        println!("ec at iteration {} with got hit-rate {}/{}. failed: {:?}",
+        println!("ec at phase {} with got hit-rate {}/{}. failed: {:?}",
                  i,
                  results.hit_rate,
                  results.programs.len(),
