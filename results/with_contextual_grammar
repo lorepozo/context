@@ -1,24 +1,24 @@
-nospaces	0.031456947326660156	-2.2031799864790065
-first letters	0.014770984649658203	-2.222806264694066
-concat first letters	0.01960611343383789	-1.9400300032404096
-filter cap	0.016871929168701172	-2.1431935906633943
-SICP	0.01960611343383789	-1.9400300032404096
-ruby -> r	0.035382986068725586	-7.569521315912725
-find dot	0.022548913955688477	-4.968810107418445
-find less-than	0.022555828094482422	-4.979695309282318
-discard after dot	0.030304908752441406	-2.2850108289114743
-drop first two chars	0.01840496063232422	-7.705795436296637
-discard before less-than	0.029939889907836914	-1.6655263721896678
-discard after greater-than	0.030298948287963867	-1.9274521925989276
-#include<os.h> -> os.h	0.02992391586303711	-5.4113035344493055
-#include<os.h> -> os	0.029939889907836914	-1.6655263721896678
-#include<os.h> -> OS	0.02198481559753418	-8.687845894553284
-ruby -> r	0.02521514892578125	-6.397070811415192
-find dot	0.01306605339050293	-6.6282509099749065
-discard after @	0.019757986068725586	-6.049037503965619
-discard after dot	0.019761085510253906	-3.6931189303346468
-dots to spaces	0.023401975631713867	-1.6386911298022326
-nospaces	0.02290511131286621	-7.033555097776866
-feach cap	0.008360147476196289	-1.640693349206675
-ruby.clinton -> Ruby Clinton	0.01247715950012207	-7.471927988746365
-ruby.clinton@mit.edu -> Ruby Clinton	0.02355790138244629	-1.6673916889596652
+nospaces	0.022606849670410156	-2.0883806265580334	((replace-substr-all empty) (string-of-char <SPACE>))
+first letters	0.010504007339477539	-2.089523210869578	(feach ((substr 0) (+1 0)))
+concat first letters	0.013738870620727539	-1.713514908918302	((B ((B ((replace-substr-all empty) (string-of-char <SPACE>))) (feach ((substr 0) (+1 0))))) (filter-words ((S is) cap)))
+filter cap	0.012089967727661133	-2.0422758468298126	(filter-words ((S is) cap))
+SICP	0.013738870620727539	-1.713514908918302	((B ((B ((replace-substr-all empty) (string-of-char <SPACE>))) (feach ((substr 0) (+1 0))))) (filter-words ((S is) cap)))
+ruby -> r	0.0323331356048584	-7.885394205562836	((substr 0) ((findchar <DOT>) (string-of-char <SPACE>)))
+find dot	0.021218061447143555	-2.5537748525940698	((B string-of-int) (findchar <DOT>))
+find less-than	0.021224021911621094	-2.5553980136767893	((B string-of-int) (findchar <LESS-THAN>))
+discard after dot	0.026879072189331055	-2.520567307324043	((S (C (substr 0))) (findchar <DOT>))
+drop first two chars	0.03370022773742676	-2.536321613408639	(((B ((C substr) (-1 0))) ((B +1) (findchar <LESS-THAN>))) (string-of-char <SPACE>))
+discard before less-than	0.025835037231445312	-2.1209127457621633	((S ((B ((C substr) (-1 0))) ((B +1) (findchar <LESS-THAN>)))) ((S (C (substr 0))) (findchar <DOT>)))
+discard after greater-than	0.0268862247467041	-2.5300558407978273	((S (C (substr 0))) (findchar <GREATER-THAN>))
+#include<os.h> -> os.h	0.025939226150512695	-2.575801232747003	((S ((B ((C substr) (-1 0))) ((B +1) (findchar <LESS-THAN>)))) ((substr 0) (-1 (-1 0))))
+#include<os.h> -> os	0.025835037231445312	-2.1209127457621633	((S ((B ((C substr) (-1 0))) ((B +1) (findchar <LESS-THAN>)))) ((S (C (substr 0))) (findchar <DOT>)))
+#include<os.h> -> OS	0.020168066024780273	-2.566869028314034	((B ((S ((B ((C substr) (-1 0))) ((B +1) (findchar <LESS-THAN>)))) ((S (C (substr 0))) (findchar <DOT>)))) upper)
+ruby -> r	0.02023005485534668	-2.4799223998850852	((substr 0) (+1 0))
+find dot	0.011492013931274414	-2.4637610427965395	((B string-of-int) (findchar <DOT>))
+discard after @	0.016079187393188477	-2.4894993844730346	((S (C (substr 0))) (findchar <AT>))
+discard after dot	0.016076087951660156	-2.4519564096983015	((S (C (substr 0))) (findchar <DOT>))
+dots to spaces	0.01894521713256836	-2.454108930811225	((replace-substr-all (string-of-char <SPACE>)) (string-of-char <DOT>))
+nospaces	0.01847100257873535	-2.463354379448889	((replace-substr-all empty) (string-of-char <SPACE>))
+feach cap	0.010966062545776367	-1.9357677139750726	((B ((S (C (substr 0))) (findchar <AT>))) ((B (feach cap)) ((replace-substr-all (string-of-char <SPACE>)) (string-of-char <DOT>))))
+ruby.clinton -> Ruby Clinton	0.010966062545776367	-1.9357677139750726	((B ((S (C (substr 0))) (findchar <AT>))) ((B (feach cap)) ((replace-substr-all (string-of-char <SPACE>)) (string-of-char <DOT>))))
+ruby.clinton@mit.edu -> Ruby Clinton	0.010966062545776367	-1.9357677139750726	((B ((S (C (substr 0))) (findchar <AT>))) ((B (feach cap)) ((replace-substr-all (string-of-char <SPACE>)) (string-of-char <DOT>))))

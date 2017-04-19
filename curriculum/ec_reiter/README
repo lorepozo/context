@@ -1,0 +1,9 @@
+This is ordered like so:
+a b c b a a b c
+So we first learn in the intended order (a b c), reverse our way to a
+fitting context for the first task, then reiterate again in the intended
+order.
+
+Ideally we wouldn't have to reverse the curriculum for re-iteration, but
+automatic context localization requires another mechanism (e.g. multiclass
+perceptron) which is not yet implemented.

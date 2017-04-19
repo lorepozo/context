@@ -16,6 +16,31 @@ NAMES = ['primitive grammar', 'specialized grammar per-phase', 'specialized gram
 NEG_INF = -10 # for logprob
 
 
+TASK_NAMES = [ # used for ytick labels.
+#sh: cat curriculum/all.json | jq -c '.tasks | .[]' | jq -r '.name'
+"nospaces",
+"first letters",
+"concat first letters",
+"filter cap",
+"SICP",
+"ruby -> r",
+"find dot",
+"find less-than",
+"discard after dot",
+"drop first two chars",
+"discard before less-than",
+"discard after greater-than",
+"#include<os.h> -> os.h",
+"#include<os.h> -> os",
+"#include<os.h> -> OS",
+"discard after @",
+"dots to spaces",
+"feach cap",
+"ruby.clinton -> Ruby Clinton",
+"ruby.clinton@mit.edu -> Ruby Clinton"
+]
+
+
 def make_table(filename): # {taskname: (time, logprob)}
     tab = {}
     with open(filename) as f:
@@ -110,7 +135,7 @@ for it in range(T):
 plt.title(title)
 plt.legend()
 plt.xlabel(xlabel)
-plt.yticks(range(N),['']*N)
+plt.yticks(range(N), list(map(lambda n: str(1+TASK_NAMES.index(n)), names)))
 plt.ylabel("task")
 plt.ylim(ymax=N+5)
 plt.savefig(PLOT+'.eps')
