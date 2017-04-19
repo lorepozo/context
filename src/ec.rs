@@ -20,7 +20,8 @@ use knowledge::Context;
 // 8 -> show ec input
 const LOG_LEVEL: u8 = 1;
 
-const STORE_INPUTS: bool = false;
+const STORE_INPUTS: bool = true;
+const STORE_FILENAME_PREFIX: &'static str = "input_contextual";
 
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
@@ -164,13 +165,11 @@ mod course {
             (tmp_dir, path)
         }
         /// save a Course to a permanent file
-        pub fn save_perm(&self, i: u64) -> String {
-            let path = Path::new("./ec_inputs").join(format!("ec_input_{}.json", i));
+        pub fn save_perm(&self, dest: &str) {
+            let path = Path::new(dest);
             let mut f = File::create(&path).expect("create ec_input file");
             let ser = serde_json::to_string(self).expect("serialize ec input");
             write!(f, "{}", ser).expect("write ec input");
-            let path = String::from(path.to_str().unwrap());
-            path
         }
     }
 }
@@ -227,6 +226,12 @@ fn ec_bin() -> String {
     }
 }
 
+/// if STORE_INPUTS is true, this is where the inputs are saved.
+fn store_input_path(i: u64) -> String {
+    let store_dir = env::var("EC_STORAGE").unwrap_or(String::from("ec_storage"));
+    format!("{}/{}_{}.json", store_dir, STORE_FILENAME_PREFIX, i)
+}
+
 /// embryo returns the embryo (embryo.json in the curriculum/ec directory)
 /// for use by the Skn that uses ec.
 pub fn embryo() -> Vec<(&'static str, String)> {
@@ -249,7 +254,8 @@ fn run_ec(ctx: &Context, i: u64) -> Results {
     }
     let output;
     if STORE_INPUTS {
-        let path = c.save_perm(i);
+        let path = store_input_path(i);
+        c.save_perm(&path);
         output = Command::new(ec_bin())
             .arg(path)
             .output()
