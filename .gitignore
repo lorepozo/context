@@ -1,7 +1,2 @@
-*.aux
-*.log
-*.out
-*.pdf
-*.html
 target
 Cargo.lock

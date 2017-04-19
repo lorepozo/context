@@ -19,8 +19,35 @@ PLOTTER=$PWD/plot_tsv.py
 cp "$EC_CURRICULUM"/* ./
 ls | grep '^course.*\.json$' | perl -pe 's/^(.*_(\d+)\.json)$/mv $1 input_$2.json/' | sh
 $CONTEXT
-$PRODUCE_DATA primitive.tsv output_primitive $EC_ONE input_01.json input_02.json input_03.json
-$PRODUCE_DATA specialized.tsv output_specialized $EC input_01.json input_02.json input_03.json
-$PRODUCE_DATA contextual.tsv output_contextual $EC input_contextual_4.json input_contextual_5.json input_contextual_6.json
+$PRODUCE_DATA primitive.tsv \
+              output_primitive \
+              $EC_ONE \
+              input_01.json \
+              input_02.json \
+              input_03.json
+$PRODUCE_DATA specialized_per_phase.tsv \
+              output_specialized_per_phase \
+              $EC \
+              input_01.json \
+              input_02.json \
+              input_03.json
+$PRODUCE_DATA specialized_full_domain.tsv \
+              output_specialized_full_domain \
+              $EC \
+              input_01.json \
+              input_02.json \
+              input_03.json
+$PRODUCE_DATA contextual.tsv \
+              output_contextual \
+              $EC \
+              input_contextual_4.json \
+              input_contextual_5.json \
+              input_contextual_6.json
 
-python $PLOTTER primitive.tsv specialized.tsv contextual.tsv
+for plot in speed likelihood
+do python $PLOTTER $plot \
+                   primitive.tsv \
+                   specialized_per_phase.tsv \
+                   specialized_full_domain.tsv \
+                   contextual.tsv
+done
