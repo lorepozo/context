@@ -20,6 +20,9 @@ PLOTTER=$PWD/plot_tsv.py
 
 cp "$EC_CURRICULUM"/*.json ./
 ls | grep '^course.*\.json$' | perl -pe 's/^(.*_(\d+)\.json)$/mv $1 input_$2.json/' | sh
+cp "$ALL" ./
+ALL=$(basename $ALL)
+
 export EC_CURRICULUM
 export EC_STORAGE
 export EC
@@ -39,7 +42,7 @@ $PRODUCE_DATA specialized_per_phase.tsv \
 $PRODUCE_DATA specialized_full_domain.tsv \
               output_specialized_full_domain \
               $EC \
-              $ALL \
+              $ALL
 $PRODUCE_DATA contextual.tsv \
               output_contextual \
               $EC \
