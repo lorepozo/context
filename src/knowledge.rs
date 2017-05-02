@@ -47,7 +47,10 @@ impl Item {
     }
     /// gets the count of accesses to this item since the given epoch.
     fn recent_count(&self, epoch: usize) -> u64 {
-        self.counts.iter().filter(|&(e, _)| *e >= epoch).fold(0, |s, (_, c)| s + c)
+        self.counts
+            .iter()
+            .filter(|&(e, _)| *e >= epoch)
+            .fold(0, |s, (_, c)| s + c)
     }
 }
 
@@ -77,13 +80,17 @@ impl Context {
         self.net.ids_to_contents(self.items.clone())
     }
     pub fn explore(&self) -> Vec<(usize, &'static str, Rc<String>)> {
-        self.net.ids_to_contents(self.items.union(&self.frontier).cloned())
+        self.net
+            .ids_to_contents(self.items.union(&self.frontier).cloned())
     }
     /// update will give a new Context object that accounts for any changes
     /// that may have happened (such as from .orient() or .grow()) since
     /// this Context object was created.
     pub fn update(&self) -> Context {
-        Context { initial_epoch: self.initial_epoch, ..self.net.context(self.mech) }
+        Context {
+            initial_epoch: self.initial_epoch,
+            ..self.net.context(self.mech)
+        }
     }
     pub fn orient(&self, id: usize) {
         self.net.orient(self.initial_epoch, id)
@@ -123,11 +130,11 @@ impl Network {
     {
         let network = Network {
             net: Rc::new(RefCell::new(Net {
-                context_min_size: CTX_MIN_SIZE,
-                max_size: NET_MAX_SIZE,
-                graph: Vec::new(),
-                epochs: Vec::new(),
-            })),
+                                          context_min_size: CTX_MIN_SIZE,
+                                          max_size: NET_MAX_SIZE,
+                                          graph: Vec::new(),
+                                          epochs: Vec::new(),
+                                      })),
         };
         {
             // scope in for this mutable borrow
@@ -136,14 +143,15 @@ impl Network {
             let mut id = 0;
             let embryo: Vec<(&'static str, String)> = embryo.into_iter().collect();
             let edges: HashSet<usize> = (0..embryo.len()).collect();
-            net.graph = embryo.into_iter()
+            net.graph = embryo
+                .into_iter()
                 .map(|(mech, data)| {
-                    let mut edges = edges.clone();
-                    edges.remove(&id);
-                    let item = Item::new(mech, edges, data, id);
-                    id = id + 1;
-                    item
-                })
+                         let mut edges = edges.clone();
+                         edges.remove(&id);
+                         let item = Item::new(mech, edges, data, id);
+                         id = id + 1;
+                         item
+                     })
                 .collect();
             // initial epoch has no accesses and context of entire embyro
             net.epochs.push((0, edges, HashSet::new())); // edges ~ embryo ids
@@ -172,11 +180,12 @@ impl Network {
         where U: IntoIterator<Item = usize>
     {
         let net = self.net.borrow();
-        items.into_iter()
+        items
+            .into_iter()
             .map(move |id| {
-                let ref item = net.graph[id];
-                (id, item.mech, item.data.clone())
-            })
+                     let ref item = net.graph[id];
+                     (id, item.mech, item.data.clone())
+                 })
             .collect()
     }
     /// orient creates a new epoch, centering the context around the given
@@ -219,17 +228,17 @@ impl Network {
                     // truncate less-used items
                     let take = size - ctx.len();
                     ext.sort_by_key(|&id| {
-                        let ref item = net.graph[id];
-                        -(item.adj.len() as i64)
-                    });
+                                        let ref item = net.graph[id];
+                                        -(item.adj.len() as i64)
+                                    });
                     ctx.extend(ext.iter().take(take));
                     break;
                 }
                 selected = ext.iter()
                     .max_by_key(|&id| {
-                        let ref item = net.graph[*id];
-                        item.recent_count(epoch)
-                    })
+                                    let ref item = net.graph[*id];
+                                    item.recent_count(epoch)
+                                })
                     .unwrap()
                     .clone();
                 ctx.extend(ext);
@@ -256,19 +265,20 @@ impl Network {
             let mut sum = 0;
             let counts: HashSet<(usize, u64)> = ids.iter()
                 .map(|&id| {
-                    let ref item = net.graph[id];
-                    let count = 1 + item.recent_count(epoch);
-                    sum += count;
-                    (id, count)
-                })
+                         let ref item = net.graph[id];
+                         let count = 1 + item.recent_count(epoch);
+                         sum += count;
+                         (id, count)
+                     })
                 .collect();
 
             // convert counts to probabilities
-            let antecedents: HashMap<usize, f64> = counts.iter()
+            let antecedents: HashMap<usize, f64> = counts
+                .iter()
                 .map(|&(id, cnt)| {
-                    let p = (cnt as f64) / (sum as f64);
-                    (id, p)
-                })
+                         let p = (cnt as f64) / (sum as f64);
+                         (id, p)
+                     })
                 .collect();
             let mut edges = HashSet::new();
 
@@ -311,11 +321,12 @@ impl Network {
     /// corresponding to all adjacent items.
     fn frontier_of(&self, items: &HashSet<usize>) -> HashSet<usize> {
         let net = self.net.borrow();
-        let frontier: HashSet<usize> = items.iter()
+        let frontier: HashSet<usize> = items
+            .iter()
             .flat_map(|&id| {
-                let ref item = net.graph[id];
-                item.adj.clone()
-            })
+                          let ref item = net.graph[id];
+                          item.adj.clone()
+                      })
             .collect();
         frontier.difference(items).cloned().collect()
     }
@@ -350,11 +361,13 @@ impl Network {
             .iter()
             .flat_map(|item| {
                 let id = item.id;
-                item.adj.iter().map(move |&o| {
-                    let mut v = vec![id, o];
-                    v.sort();
-                    (v[0], v[1])
-                })
+                item.adj
+                    .iter()
+                    .map(move |&o| {
+                             let mut v = vec![id, o];
+                             v.sort();
+                             (v[0], v[1])
+                         })
             })
             .collect::<Vec<_>>();
         edges.sort();

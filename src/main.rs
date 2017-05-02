@@ -16,10 +16,10 @@ use clap::{Arg, App};
 fn argparse() -> Option<String> {
     let matches = App::new("skn with ec")
         .arg(Arg::with_name("dot")
-            .long("dot")
-            .value_name("FILE")
-            .help("writes graphviz dot to file")
-            .takes_value(true))
+                 .long("dot")
+                 .value_name("FILE")
+                 .help("writes graphviz dot to file")
+                 .takes_value(true))
         .get_matches();
     match matches.value_of("dot") {
         Some(s) => Some(String::from(s)),

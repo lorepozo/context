@@ -21,43 +21,43 @@ use knowledge::Context;
 const LOG_LEVEL: u8 = 1;
 
 const STORE_INPUTS: bool = true;
-const STORE_FILENAME_PREFIX: &'static str = "input_contextual";
+const STORE_FILENAME_PREFIX: &str = "input_contextual";
 
 const EC_GRAMMAR_INCLUDE_PROGS: bool = false;
 const EC_ACCESS_FACTOR: f64 = 400f64;
 const EC_MAX_IN_ARTIFACT: usize = 20;
-static PRIMS_ARR: [&'static str; 32] = ["B",
-                                        "C",
-                                        "S",
-                                        "K",
-                                        "I",
-                                        "is",
-                                        "empty",
-                                        "upper",
-                                        "lower",
-                                        "cap",
-                                        "+",
-                                        "0",
-                                        "+1",
-                                        "-1",
-                                        "wc",
-                                        "cc",
-                                        "string-of-int",
-                                        "findchar",
-                                        "<SPACE>",
-                                        "<COMMA>",
-                                        "<DOT>",
-                                        "<AT>",
-                                        "<LESS-THAN>",
-                                        "<GREATER-THAN>",
-                                        "string-of-char",
-                                        "substr",
-                                        "replace",
-                                        "replace-substr-first",
-                                        "replace-substr-all",
-                                        "nth",
-                                        "fnth",
-                                        "feach"];
+static PRIMS_ARR: [&str; 32] = ["B",
+                                "C",
+                                "S",
+                                "K",
+                                "I",
+                                "is",
+                                "empty",
+                                "upper",
+                                "lower",
+                                "cap",
+                                "+",
+                                "0",
+                                "+1",
+                                "-1",
+                                "wc",
+                                "cc",
+                                "string-of-int",
+                                "findchar",
+                                "<SPACE>",
+                                "<COMMA>",
+                                "<DOT>",
+                                "<AT>",
+                                "<LESS-THAN>",
+                                "<GREATER-THAN>",
+                                "string-of-char",
+                                "substr",
+                                "replace",
+                                "replace-substr-first",
+                                "replace-substr-all",
+                                "nth",
+                                "fnth",
+                                "feach"];
 
 /// course is for loading inputs for use with ec.
 mod course {
@@ -89,7 +89,8 @@ mod course {
         let path = Path::new(&curr_path).join(name);
         let mut f = File::open(&path).expect("opening curriculum file");
         let mut s = String::new();
-        f.read_to_string(&mut s).expect("reading curriculum file");
+        f.read_to_string(&mut s)
+            .expect("reading curriculum file");
         s
     }
 
@@ -100,13 +101,13 @@ mod course {
             .expect("read curriculum dir")
             .map(|entry| entry.expect("read curriculum dir"))
             .filter(|dir| {
-                let path = dir.path();
-                let rel_path = path.strip_prefix(&curr_path).unwrap();
-                match rel_path.to_str() {
-                    Some(filename) => re.is_match(filename),
-                    _ => false,
-                }
-            })
+                        let path = dir.path();
+                        let rel_path = path.strip_prefix(&curr_path).unwrap();
+                        match rel_path.to_str() {
+                            Some(filename) => re.is_match(filename),
+                            _ => false,
+                        }
+                    })
             .count() as u64
     }
 
@@ -146,11 +147,9 @@ mod course {
                 .filter(|&(_, mech, _)| mech == "ec")
                 .map(|(_, _, d)| d);
             for raw_item in raw_items {
-                let item: Vec<String> = serde_json::from_str(&raw_item)
-                    .expect("parse combinator from context");
-                let mut grammar: Vec<Comb> = item.into_iter()
-                    .map(|s| Comb { expr: s })
-                    .collect();
+                let item: Vec<String> =
+                    serde_json::from_str(&raw_item).expect("parse combinator from context");
+                let mut grammar: Vec<Comb> = item.into_iter().map(|s| Comb { expr: s }).collect();
                 self.grammar.append(&mut grammar);
             }
         }
@@ -293,10 +292,10 @@ fn exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>) -> HashMap<Stri
     ctx.into_iter()
         .filter(|&(_, mech, _)| mech == "ec")
         .map(|(id, _, d)| {
-            let item: Vec<String> = serde_json::from_str(&d)
-                .expect("parse combinators from context");
-            (id, item)
-        })
+                 let item: Vec<String> =
+                     serde_json::from_str(&d).expect("parse combinators from context");
+                 (id, item)
+             })
         .flat_map(|(id, item)| item.into_iter().map(move |expr| (expr, id)))
         .collect()
 }
@@ -309,11 +308,12 @@ fn find_exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
                          exprs: &Vec<&String>)
                          -> Vec<Option<usize>> {
     let exprs_in_ctx = exprs_in_context(ctx);
-    exprs.iter()
+    exprs
+        .iter()
         .map(|&e| match exprs_in_ctx.get(e) {
-            Some(id) => Some(*id),
-            None => None,
-        })
+                 Some(id) => Some(*id),
+                 None => None,
+             })
         .collect()
 }
 
@@ -331,7 +331,8 @@ fn find_expr_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
 pub fn mech(ctx: Context, i: u64) {
     // run ec
     let results = run_ec(&ctx, i);
-    let failures: Vec<&String> = results.programs
+    let failures: Vec<&String> = results
+        .programs
         .iter()
         .filter(|p| p.result.is_none())
         .map(|p| &p.task)
@@ -349,21 +350,23 @@ pub fn mech(ctx: Context, i: u64) {
 
     // retrieve learned combs
     let prims = primitives();
-    let mut learned: Vec<(String, f64)> = results.grammar
+    let mut learned: Vec<(String, f64)> = results
+        .grammar
         .iter()
         .map(|c| (c.expr.clone(), c.log_likelihood))
         .filter(|c| !prims.contains(&c.0) && c.1.is_finite())
         .collect();
     if EC_GRAMMAR_INCLUDE_PROGS {
-        learned.extend(results.programs
-            .iter()
-            .filter(|t| t.result.is_some())
-            .map(|t| {
-                let ref r = t.result;
-                let r = r.clone().unwrap();
-                (r.expr, r.log_probability)
-            })
-            .filter(|c| !prims.contains(&c.0) && c.1.is_finite()));
+        learned.extend(results
+                           .programs
+                           .iter()
+                           .filter(|t| t.result.is_some())
+                           .map(|t| {
+                                    let ref r = t.result;
+                                    let r = r.clone().unwrap();
+                                    (r.expr, r.log_probability)
+                                })
+                           .filter(|c| !prims.contains(&c.0) && c.1.is_finite()));
     }
 
     // early return if no useful results
@@ -373,7 +376,8 @@ pub fn mech(ctx: Context, i: u64) {
 
     // orient to most probable comb
     let mut ctx = ctx;
-    let most_probable = learned.iter()
+    let most_probable = learned
+        .iter()
         .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap())
         .unwrap()
         .0
@@ -398,8 +402,14 @@ pub fn mech(ctx: Context, i: u64) {
         .map(|(&(ref s, p), o)| (s, p, o.unwrap())) // s, p, id
         .filter(|&(_, p, _)| p.is_finite())
         .collect();
-    let least = access_info.iter().map(|&(_, p, _)| p).fold(f64::INFINITY, f64::min);
-    let most = access_info.iter().map(|&(_, p, _)| p).fold(f64::NEG_INFINITY, f64::max);
+    let least = access_info
+        .iter()
+        .map(|&(_, p, _)| p)
+        .fold(f64::INFINITY, f64::min);
+    let most = access_info
+        .iter()
+        .map(|&(_, p, _)| p)
+        .fold(f64::NEG_INFINITY, f64::max);
     access_info = access_info
         .into_iter()
         .map(|(s, p, id)| (s, EC_ACCESS_FACTOR * (p-least)/(most-least), id)) // normalize
