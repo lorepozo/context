@@ -204,6 +204,7 @@ impl Network {
             // popularity, select most popular neighbor and repeat. stop
             // when we get to `size`.
             ctx = HashSet::new();
+            ctx.insert(id);
             let mut selected = id;
             while ctx.len() < size {
                 let mut ext: Vec<usize> = net.graph[selected]
@@ -219,7 +220,7 @@ impl Network {
                     let take = size - ctx.len();
                     ext.sort_by_key(|&id| {
                         let ref item = net.graph[id];
-                        -(item.recent_count(epoch) as i64) // reversed
+                        -(item.adj.len() as i64)
                     });
                     ctx.extend(ext.iter().take(take));
                     break;

@@ -14,7 +14,7 @@ EC=/home/lucasem/repo/context/ec
 EC_ONE=/home/lucasem/repo/context/ec_one
 EC_CURRICULUM=/home/lucasem/repo/context/curriculum/ec_reiter
 ALL=/home/lucasem/repo/context/curriculum/all.json
-CONTEXT=/home/lucasem/repo/context/target/debug/context
+CONTEXT=/home/lucasem/repo/context/target/release/context
 PRODUCE_DATA=$PWD/produce_data.sh
 PLOTTER=$PWD/plot_tsv.py
 
