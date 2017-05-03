@@ -35,12 +35,15 @@ done
 ## PRODUCE EC OUTPUTS ##
 ########################
 outputs=()
+out_times=()
 for input in ${inputs[@]}
 do
   output="$outprefix$input"
   echo "producing $output"
-  $ec $input > $output
+  /bin/time -f'%U' $ec $input > $output 2>tmp
+  t=$(cat tmp)
   outputs+=("$output")
+  out_times+=("$t")
 done
 
 
@@ -51,8 +54,11 @@ if test -e $out
 then rm $out
 fi
 
-for file in ${outputs[@]}
-do cat $file | jq -rc '.programs | .[] | if .result == null then empty else . end | "\(.task)\t\(.result.time)\t\(.result.log_probability)\t\(.result.expr)"' >> $out
+for ((i = 0; i < ${#outputs[@]}; i++))
+do
+  file="${outputs[$i]}"
+  t="${out_times[$i]}"
+  cat $file | jq -rc '.programs | .[] | if .result == null then empty else . end | "\(.task)\t\(.result.time)\t\(.result.log_probability)\t'"$t"'\t\(.result.expr)"' >> $out
 done
 
 

@@ -45,12 +45,12 @@ $PRODUCE_DATA specialized_full_domain.tsv \
               $ALL
 $PRODUCE_DATA contextual.tsv \
               output_contextual \
-              $EC \
+              $EC_ONE \
               input_contextual_6.json \
               input_contextual_7.json \
               input_contextual_8.json
 
-for plot in speed likelihood
+for plot in speed_total speed_iter likelihood
 do python $PLOTTER $plot \
                    primitive.tsv \
                    specialized_per_phase.tsv \

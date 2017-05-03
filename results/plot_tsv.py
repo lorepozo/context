@@ -11,7 +11,7 @@ if len(sys.argv) < 6:
     exit(1)
 
 
-PLOT = sys.argv[1].lower() # 'speed' or 'likelihood'
+PLOT = sys.argv[1].lower() # 'speed_total', 'speed_iter' or 'likelihood'
 NAMES = ['primitive grammar', 'specialized grammar per-phase', 'specialized grammar full-domain', 'contextual grammar']
 NEG_INF = -10 # for logprob
 
@@ -46,8 +46,8 @@ def make_table(filename): # {taskname: (time, logprob)}
     with open(filename) as f:
         for line in f:
             datum = line.strip().split("\t")
-            name, time, logprob = datum[:3]
-            tab[name] = (float(time), float(logprob))
+            name, itertime, logprob, totaltime = datum[:4]
+            tab[name] = (float(itertime), float(logprob), float(totaltime))
         return tab
 
 def ordered(tables, col, # col into table value
@@ -99,10 +99,25 @@ else:
     offsets = list(map(lambda x:x/2, range(1-T, T, 2)))[::-1]
 
 
-if PLOT == 'speed':
+if PLOT == 'speed_total':
+    names, values = ordered(tables, 2, mapping=lambda x:1/x)
+    # failed tasks have zero speed
+    inames, ivalues = ordered(tables, 0, mapping=lambda x:1/x)
+    for ii, iname in enumerate(inames):
+        i = names.index(iname)
+        assert i != -1
+        for it in range(T):
+            if ivalues[it][i] == 0:
+                values[it][i] = 0
+    values = scatterify(values, err=0.05)
+    title = "total task solve speed"
+    xlabel = "solve speed (s⁻¹)"
+    xticks = None
+    scatter = True
+elif PLOT == 'speed_iter':
     names, values = ordered(tables, 0, mapping=lambda x:1/x)
     values = scatterify(values, err=3)
-    title = "task solve speed"
+    title = "final iteration task solve speed"
     xlabel = "solve speed (s⁻¹)"
     xticks = None
     scatter = True
