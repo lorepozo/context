@@ -1,7 +1,7 @@
 # Context
 
-My MIT SuperUROP project: **{WIP}**
-[Automatic Least-Effort Contextual Learning](https://docs.lucasem.com/context),
+My MIT SuperUROP project:
+[Automatic Least-Effort Contextual Learning](https://docs.lucasem.com/context).
 
 
 ## Install and Build
