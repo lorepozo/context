@@ -101,16 +101,8 @@ else:
 
 if PLOT == 'speed_total':
     names, values = ordered(tables, 2, mapping=lambda x:1/x)
-    # failed tasks have zero speed
-    inames, ivalues = ordered(tables, 0, mapping=lambda x:1/x)
-    for ii, iname in enumerate(inames):
-        i = names.index(iname)
-        assert i != -1
-        for it in range(T):
-            if ivalues[it][i] == 0:
-                values[it][i] = 0
     values = scatterify(values, err=0.05)
-    title = "total task solve speed"
+    title = "phase completion speed"
     xlabel = "solve speed (s⁻¹)"
     xticks = None
     scatter = True
