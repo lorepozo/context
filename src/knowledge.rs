@@ -166,7 +166,7 @@ impl Network {
                          let mut edges = edges.clone();
                          edges.remove(&id);
                          let item = Item::new(mech, edges, data, id);
-                         id = id + 1;
+                         id += 1;
                          item
                      })
                 .collect();
@@ -186,7 +186,7 @@ impl Network {
     fn item_count(&self, epoch: usize, id: usize, count: u64) {
         let mut net = self.net.borrow_mut();
         {
-            let ref mut item = net.graph[id];
+            let item = &mut net.graph[id];
             item.add_count(epoch, count);
         }
         net.epochs[epoch].2.insert(id);
@@ -200,7 +200,7 @@ impl Network {
         items
             .into_iter()
             .map(move |id| {
-                     let ref item = net.graph[id];
+                     let item = &net.graph[id];
                      (id, item.mech, item.data.clone())
                  })
             .collect()
@@ -245,19 +245,18 @@ impl Network {
                     // truncate less-used items
                     let take = size - ctx.len();
                     ext.sort_by_key(|&id| {
-                                        let ref item = net.graph[id];
+                                        let item = &net.graph[id];
                                         -(item.adj.len() as i64)
                                     });
                     ctx.extend(ext.iter().take(take));
                     break;
                 }
-                selected = ext.iter()
+                selected = *ext.iter()
                     .max_by_key(|&id| {
-                                    let ref item = net.graph[*id];
+                                    let item = &net.graph[*id];
                                     item.recent_count(epoch)
                                 })
-                    .unwrap()
-                    .clone();
+                    .unwrap();
                 ctx.extend(ext);
             }
         }
@@ -282,7 +281,7 @@ impl Network {
             let mut sum = 0;
             let counts: HashSet<(usize, u64)> = ids.iter()
                 .map(|&id| {
-                         let ref item = net.graph[id];
+                         let item = &net.graph[id];
                          let count = 1 + item.recent_count(epoch);
                          sum += count;
                          (id, count)
@@ -323,7 +322,7 @@ impl Network {
 
             // update other end of new edges (undirected network)
             for oid in &edges {
-                let ref mut item = net.graph[*oid];
+                let item = &mut net.graph[*oid];
                 item.adj.insert(id);
             }
 
@@ -341,7 +340,7 @@ impl Network {
         let frontier: HashSet<usize> = items
             .iter()
             .flat_map(|&id| {
-                          let ref item = net.graph[id];
+                          let item = &net.graph[id];
                           item.adj.clone()
                       })
             .collect();
@@ -370,7 +369,7 @@ impl Network {
         let net = self.net.borrow();
         let mut body = String::new();
         for id in 0..net.graph.len() {
-            let label = format!("id={}  {}", id, &net.graph[id].data.as_str().clone());
+            let label = format!("id={}  {}", id, (*net.graph[id].data).clone());
             body.push_str(format!("  N{} [shape=box,label={:?}];\n", id, label).as_str());
         }
         body.pop();
@@ -396,7 +395,7 @@ impl Network {
     }
 }
 
-/// MechanismRegistry maintains a set of mechanisms used by the knowledge
+/// `MechanismRegistry` maintains a set of mechanisms used by the knowledge
 /// network. A mechanism is a function which takes a Context and an
 /// iteration number.
 struct MechanismRegistry<'a> {

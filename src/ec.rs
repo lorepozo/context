@@ -242,9 +242,9 @@ fn ec_bin() -> String {
     }
 }
 
-/// if STORE_INPUTS is true, this is where the inputs are saved.
+/// if `STORE_INPUTS` is true, this is where the inputs are saved.
 fn store_input_path(i: u64) -> String {
-    let store_dir = env::var("EC_STORAGE").unwrap_or(String::from("ec_storage"));
+    let store_dir = env::var("EC_STORAGE").unwrap_or_else(|_| String::from("ec_storage"));
     format!("{}/{}_{}.json", store_dir, STORE_FILENAME_PREFIX, i)
 }
 
@@ -260,7 +260,7 @@ fn primitives() -> HashSet<String> {
     PRIMS_ARR.iter().map(|&s| String::from(s)).collect()
 }
 
-/// run_ec is the lower-level function that produces the ec results for a
+/// `run_ec` is the lower-level function that produces the ec results for a
 /// given context and course iteration.
 fn run_ec(ctx: &Context, i: u64) -> Results {
     let mut c = Course::load(i);
@@ -290,20 +290,17 @@ fn run_ec(ctx: &Context, i: u64) -> Results {
     }
     let raw_results = String::from_utf8(output.stdout).expect("read ec output");
     if LOG_LEVEL & 4 != 0 {
-        let err = match output.stderr.is_empty() {
-            true => String::from(""),
-            false => {
-                let raw_err = String::from_utf8(output.stderr).expect("read ec err");
-                format!("EC ERROR:\n{}\n", raw_err)
-            }
+        let err = if output.stderr.is_empty() { String::from("") } else {
+            let raw_err = String::from_utf8(output.stderr).expect("read ec err");
+            format!("EC ERROR:\n{}\n", raw_err)
         };
         println!("{}EC OUTPUT:\n{}", err, raw_results)
     }
     Results::from_string(raw_results)
 }
 
-/// exprs_in_context takes a set of items in the context as given by
-/// Context::get() or Context::explore() and returns the combinators
+/// `exprs_in_context` takes a set of items in the context as given by
+/// `Context::get()` or `Context::explore()` and returns the combinators
 /// contained in those that are readable by ec.
 fn exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>) -> HashMap<String, usize> {
     ctx.into_iter()
@@ -317,12 +314,12 @@ fn exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>) -> HashMap<Stri
         .collect()
 }
 
-/// find_exprs_in_context takes a set of items in the context as given by
-/// Context::get() or Context::explore() and a vector of combinators.
-/// It returns a vector of the same size as exprs, with Some(id) if a match
+/// `find_exprs_in_context` takes a set of items in the context as given by
+/// `Context::get()` or `Context::explore()` and a vector of combinators.
+/// It returns a vector of the same size as exprs, with `Some(id)` if a match
 /// was found or None otherwise.
 fn find_exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
-                         exprs: &Vec<&String>)
+                         exprs: &[&str])
                          -> Vec<Option<usize>> {
     let exprs_in_ctx = exprs_in_context(ctx);
     exprs
@@ -334,12 +331,12 @@ fn find_exprs_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
         .collect()
 }
 
-/// find_expr_in_context is like find_exprs_in_context but for a single
-/// combinator.
+/// `find_expr_in_context` is like `find_exprs_in_context` but for a
+/// single combinator.
 fn find_expr_in_context(ctx: Vec<(usize, &'static str, Rc<String>)>,
-                        expr: String)
+                        expr: &str)
                         -> Option<usize> {
-    find_exprs_in_context(ctx, &vec![&expr])[0]
+    find_exprs_in_context(ctx, &[expr])[0]
 }
 
 /// mech is the ec mechanism as it should be registered/used by an Skn
@@ -379,7 +376,7 @@ pub fn mech(ctx: Context, i: u64) {
                            .iter()
                            .filter(|t| t.result.is_some())
                            .map(|t| {
-                                    let ref r = t.result;
+                                    let r = &t.result;
                                     let r = r.clone().unwrap();
                                     (r.expr, r.log_probability)
                                 })
@@ -393,25 +390,26 @@ pub fn mech(ctx: Context, i: u64) {
 
     // orient to most probable comb
     let mut ctx = ctx;
-    let most_probable = learned
-        .iter()
-        .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap())
-        .unwrap()
-        .0
-        .clone();
-    let result = find_expr_in_context(ctx.explore(), most_probable);
-    if let Some(id) = result {
-        if LOG_LEVEL & 2 != 0 {
-            println!("   ctx.orient({})", id);
+    {
+        let most_probable  = &learned
+            .iter()
+            .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap())
+            .unwrap()
+            .0;
+        let result = find_expr_in_context(ctx.explore(), most_probable);
+        if let Some(id) = result {
+            if LOG_LEVEL & 2 != 0 {
+                println!("   ctx.orient({})", id);
+            }
+            ctx.orient(id);
+            ctx = ctx.update();
         }
-        ctx.orient(id);
-        ctx = ctx.update();
     }
 
     // make accesses ~ usage
     learned.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap()); // reversed sort
-    let exprs = &learned.iter().map(|&(ref s, _)| s).collect();
-    let findings = find_exprs_in_context(ctx.get(), exprs);
+    let exprs: Vec<&str> = learned.iter().map(|l| l.0.as_str()).collect();
+    let findings = find_exprs_in_context(ctx.get(), &exprs);
     let mut access_info: Vec<(&String, f64, usize)> = learned
         .iter()
         .zip(findings.into_iter())
@@ -443,7 +441,7 @@ pub fn mech(ctx: Context, i: u64) {
         .map(|&(ref s, _)| s)
         .filter(|&s| !prims.contains(s) && !exprs_in_ctx.contains_key(s))
         .take(EC_MAX_IN_ARTIFACT)
-        .map(|s| s.clone())
+        .cloned()
         .collect();
     if !new_combs.is_empty() {
         ctx.grow(json!(new_combs).to_string());
