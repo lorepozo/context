@@ -9,14 +9,14 @@ Note that this is not deterministic.
 Press Enter to continue"
 read
 
-EC_STORAGE=$PWD
-EC=/home/lucasem/repo/context/ec
-EC_ONE=/home/lucasem/repo/context/ec_one
-EC_CURRICULUM=/home/lucasem/repo/context/curriculum/ec_reiter
-ALL=/home/lucasem/repo/context/curriculum/all.json
-CONTEXT=/home/lucasem/repo/context/target/release/context
-PRODUCE_DATA=$PWD/produce_data.sh
-PLOTTER=$PWD/plot_tsv.py
+EC_STORAGE=.
+EC=../ec
+EC_ONE=../ec_one
+EC_CURRICULUM=../curriculum/ec_reiter
+ALL=../curriculum/all.json
+CONTEXT=../target/release/context
+PRODUCE_DATA=./produce_data.sh
+PLOTTER=./plot_tsv.py
 
 cp "$EC_CURRICULUM"/*.json ./
 ls | grep '^course.*\.json$' | perl -pe 's/^(.*_(\d+)\.json)$/mv $1 input_$2.json/' | sh
